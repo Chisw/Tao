@@ -121,10 +121,29 @@ const config = {
       let msgIndex = 0
       do {
         const msg = msgList[msgIndex]
-        const { tid, content, created_time, lbs, source_name, pic, video, commentlist } = msg
+        const {
+          tid,
+          content,
+          created_time,
+          lbs,
+          source_name,
+          pic,
+          video,
+          commentlist,
+          rt_con,
+          rt_createTime,
+          rt_source_name,
+          rt_uin,
+          rt_uinname,
+        } = msg
+
         ;(commentlist || []).forEach(c => {
           if (!friendMap[c.uin]) friendMap[c.uin] = c.name
         })
+
+        if (rt_uin && rt_uinname && !friendMap[rt_uin]) {
+          friendMap[rt_uin] = rt_uinname
+        }
 
         const likeList = []
         const like = await this.fetchLikeListByTid(tid)
@@ -147,7 +166,15 @@ const config = {
           video: this.handlePicOrVideo(video || [], tid),
           commentlist,
           likeList,
-          prd: newdata ? (newdata.PRD || 0) : 0
+          likeSelf: likedata ? Boolean(likedata.ilike) : false,
+          likeCount: likedata ? likedata.cnt || 0 : 0,
+          personRead: newdata ? (newdata.PRD || 0) : 0,
+          repost: {
+            content: rt_con ? (rt_con.content || '') : '',
+            created_time: rt_createTime,
+            source_name: rt_source_name,
+            qq: rt_uin,
+          }
         })
 
         msgIndex++
@@ -171,18 +198,33 @@ const config = {
         do {
           const binary = this._binary[binaryIndex]
           const { name, url } = binary
-
           this.log(`Handling ${name.endsWith('.mp4') ? 'a video' : 'an image'}.. 【抓取图片、视频】 [${binaryIndex+1}/${this._binary.length}]`)
-
           try {
             const buff = await this.fetchBinary(url)
             await folder.file(`media/${name}`, buff, { base64: true })
           } catch(error) {
             this.log(`${error} - media/${name} fetch failed.`)
           }
-
           binaryIndex++
         } while (binaryIndex < this._binary.length)
+      }
+
+      // zip avatar
+      const qqList = Object.keys(friendMap)
+      if (qqList.length) {
+        let avatarIndex = 0
+        do {
+          const qq = qqList[avatarIndex]
+          const url = `https://qlogo1.store.qq.com/qzone/${qq}/${qq}/100`
+          this.log(`Handling avatar of ${qq}.. 【抓取头像】 [${avatarIndex + 1}/${qqList.length}]`)
+          try {
+            const buff = await this.fetchBinary(url)
+            await folder.file(`avatar/${qq}.jpeg`, buff, { base64: true })
+          } catch (error) {
+            this.log(`${error} - avatar/${qq} fetch failed.`)
+          }
+          avatarIndex++
+        } while (avatarIndex < qqList.length)
       }
 
       this.log(`Preparing to download, please wait a moment..`)
