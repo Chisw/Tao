@@ -63,13 +63,18 @@ html, body {
               <img :src="`./user_data/avatar/${config.qq}.jpeg`" class="block w-10 h-10 rounded-full" />
             </div>
             <div class="flex-grow">
-              <p class="text-base">{{friendMap[config.qq]}}</p>
+              <p class="text-base">{{FM[config.qq]}}</p>
               <p class="text-xs text-gray-500">{{getDatetime(tao.created_time)}}</p>
+            </div>
+            <div>
+              <el-tooltip class="item" effect="dark" :content="`复制 ID: ${tao.tid}`" placement="left">
+                <el-button icon="el-icon-copy-document" size="mini" circle @click="copy(`'${tao.tid}'`)"></el-button>
+              </el-tooltip>
             </div>
           </div>
           
           <!-- content -->
-          <p class="my-3 text-justify text-base text-gray-900">{{tao.content}}</p>
+          <p class="my-3 text-justify text-base text-gray-900" v-html="e(tao.content)"></p>
 
           <div v-if="tao.pic.length" class="flex flex-wrap">
             <div class="mr-1 mb-1 w-24 h-24" v-for="p in tao.pic">
@@ -99,22 +104,31 @@ html, body {
             </span>
           </div>
 
+          <div v-if="tao.likeCount > 0" class="text-sm mt-4 pt-4 border-t text-gray-600">
+            {{tao.likeSelf ? '我' : ''}}
+            {{tao.likeSelf && tao.likeList.length ? '和' : ''}}
+            <span v-for="(qq, index) in tao.likeList">
+              {{index !== 0 ? '、' : ''}}<span class="text-blue-700 cursor-pointer">{{FM[qq]}}</span>
+            </span>
+            {{tao.likeCount}} 人觉得很赞
+          </div>
+
           <div v-if="tao.commentlist" class="mt-4 pt-4 text-sm border-t">
             <div v-for="t in tao.commentlist" class="mb-3">
               <div class="flex">
                 <img :src="`./user_data/avatar/${t.uin}.jpeg`" class="block w-8 h-8 rounded-full shadow" />
                 <div class="flex-grow pl-2 break-all">
-                  <p class="text-blue-700 cursor-pointer">{{friendMap[t.uin]}}</p>
+                  <p><span class="text-blue-700 cursor-pointer">{{FM[t.uin]}}</span></p>
                   <p class="text-xs text-gray-500">{{t.createTime2}}</p>
-                  <p class="mt-1">{{t.content}}</p>
+                  <p class="mt-1" v-html="e(t.content)"></p>
                 </div>
               </div>
               <div v-for="sub in t.list_3" class="ml-10 break-all bg-gray-200 rounded p-2 mt-2">
                 <p class="text-xs">
-                  <span class="text-blue-700 cursor-pointer">{{friendMap[sub.uin]}}</span> <span class="text-gray-500">回复：</span>
+                  <span class="text-blue-700 cursor-pointer">{{FM[sub.uin]}}</span> <span class="text-gray-500">回复：</span>
                   <span class="float-right text-gray-400">{{sub.createTime2}}</span>
                 </p>
-                <p class="mt-1">{{cutAt(sub.content)}}</p>
+                <p class="mt-1" v-html="e(cutAt(sub.content))"></p>
               </div>
             </div>
           </div>
@@ -167,6 +181,7 @@ html, body {
       data: {
         pageSize: 20,
         taoListShow: [],
+        FM: Object.assign({}, friendMap, config.alias),
       },
 
       created: function() {
@@ -198,6 +213,35 @@ html, body {
             return str
           }
         },
+
+        // handleEmoji
+        e(str) {
+          const emojis = str.match(/\[em\]e[0-9]*\[\/em\]/gi)
+          if (emojis) {
+            let html = str
+            const images = emojis.map(e => {
+              const no = e.replace('[em]', '').replace('[/em]', '')
+              return `<img class="inline-block w-5 h-5" src="./user_data/emoji/${no}.gif" />`
+            })
+            images.forEach((img, index) => {
+              html = html.replace(emojis[index], img)
+            })
+            return html
+          } else {
+            return str
+          }
+        },
+
+        copy(str) {
+          const input = document.createElement('input')
+          document.body.appendChild(input)
+          input.value = str
+          input.select()
+          document.execCommand('Copy')
+          document.body.removeChild(input)
+          this.$message({ message: '复制成功', type: 'success' })
+        },
+
       },
 
     });
