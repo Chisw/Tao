@@ -57,8 +57,6 @@ const config = {
       } while (pos < total)
 
       setTimeout(async () => {
-        this.log(`Fetching finished.`)
-        this.log(`Start handling msgList..`)
         await this.handleMsgList(msgList)
       }, 100)
 
@@ -96,6 +94,29 @@ const config = {
             return {}
           }
         })
+    },
+
+    async fetchAvatarBase64(qq) {
+      const url = `https://q1.qlogo.cn/g?b=qq&nk=${qq}&s=640`
+      const size = 200
+
+      return new Promise((resolve, reject) => {
+        const img = document.createElement('img')
+        img.setAttribute('crossOrigin', 'Anonymous')
+        img.src = url
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          canvas.width = size
+          canvas.height = size
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, size, size)
+          const base64 = canvas.toDataURL('image/jpeg', 1).replace('data:image/jpeg;base64,', '')
+          resolve(base64)
+        }
+        img.onerror = (error) => {
+          reject(error)
+        }
+      })
     },
 
     handlePicOrVideo(list, tid) {
@@ -213,15 +234,15 @@ const config = {
       const qqList = Object.keys(friendMap)
       if (qqList.length) {
         let avatarIndex = 0
+
         do {
           const qq = qqList[avatarIndex]
-          const url = `https://qlogo1.store.qq.com/qzone/${qq}/${qq}/100`
           this.log(`Handling avatar of ${qq}.. 【抓取头像】 [${avatarIndex + 1}/${qqList.length}]`)
           try {
-            const buff = await this.fetchBinary(url)
-            await folder.file(`avatar/${qq}.jpeg`, buff, { base64: true })
-          } catch (error) {
-            this.log(`${error} - avatar/${qq} fetch failed.`)
+            const base64 = await this.fetchAvatarBase64(qq)
+            await folder.file(`avatar/${qq}.jpeg`, base64, { base64: true })
+          } catch(error) {
+            this.log(`${error} - media/${name} fetch failed.`)
           }
           avatarIndex++
         } while (avatarIndex < qqList.length)
