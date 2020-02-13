@@ -1,7 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 
+
 const App = () => {
+
+  const [JSZipTxt, setJSZipTxt] = useState('')
+  const [FileSaverTxt, setFileSaverTxt] = useState('')
+  const [TaoTxt, setTaoTxt] = useState('')
+
+  useEffect(() => {
+    fetch('/code/JSZip.txt')
+      .then(res => res.text())
+      .then(text => {
+        setJSZipTxt(text)
+      })
+    fetch('/code/FileSaver.txt')
+      .then(res => res.text())
+      .then(text => {
+        setFileSaverTxt(text)
+      })
+    fetch('/code/tao.js')
+      .then(res => res.text())
+      .then(text => {
+        setTaoTxt(text)
+      })
+  }, [])
+
   return (
     <div className="" style={{width: 640, margin: '0 auto'}}>
       <h2>Tao - Farewell, Taotao of QQ</h2>
@@ -19,6 +43,10 @@ const App = () => {
         &emsp;&emsp;&emsp;&emsp;/config.js<br/>
         &emsp;&emsp;/index.html<br/>
       </code>
+
+      <div>
+        <textarea readOnly value={JSZipTxt + FileSaverTxt + TaoTxt}></textarea>
+      </div>
 
       <div>
         1. 使用 Chrome 浏览器登录 QQ 空间后，打开开发者工具，点击说说按钮

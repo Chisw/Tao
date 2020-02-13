@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Tao</title>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+  <link rel="stylesheet" href="./static/css/element.min.css">
+  <link rel="shortcut icon" href="./static/favicon.ico">
+<style>
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+html, body {
+  background: #fafafa;
+}
+
+.tao-container {
+  padding: 20px;
+  max-width: 1200px;
+  min-width: 320px;
+}
+
+.tao-container .container-main {
+  width: 80%;
+}
+
+.tao-container .container-main .main-list .list-item {
+  margin: 20px 0;
+}
+
+
+</style>
+</head>
+<body>
+<div id="tao">
+
+  <div class="tao-container">
+
+    <div class="container-main">
+
+      <div class="main-list">
+        <el-card v-for="tao in taoListShow" class="list-item">
+          {{tao.content}}
+        </el-card>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+<script src="./static/js/vue.min.js"></script>
+<script src="./static/js/element.min.js"></script>
+<script src="./user_data/data/taoList.js"></script>
+<script src="./user_data/data/friendMap.js"></script>
+<script src="./user_data/data/config.js"></script>
+<script>
+(function(){
+
+  var vm = new Vue({
+
+    el: '#tao',
+
+    data: {
+      pageSize: 20,
+      taoListShow: [],
+    },
+
+    created: function() {
+      this.taoListShow = taoList.slice(0, this.pageSize)
+    },
+
+    methods: {
+
+    },
+
+  });
+
+  window.ji = vm;  // TODO: DELETE TEST CODE
+
+}());
+</script>
+</html>
