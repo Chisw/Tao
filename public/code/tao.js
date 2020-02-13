@@ -194,10 +194,10 @@
       folder.file(`data/friendMap.js`, 'const friendMap = ' + JSON.stringify(friendMap))
       folder.file(`data/config.js`, `
 const config = {
-  title: '${encodeURIComponent(document.title)}',
-  description: '${encodeURIComponent(document.querySelector('meta[name="description"]').getAttribute('content'))}',
-  qq: ${this._qq},
-  name: ${this._name},
+  title: '${this._other || encodeURIComponent(document.title)}',
+  description: '${this._other || encodeURIComponent(document.querySelector('meta[name="description"]').getAttribute('content'))}',
+  qq: ${this._other || this._qq},
+  name: '${this._other || encodeURIComponent(this._name)}',
   hide: [
     // '603******************700',
   ],

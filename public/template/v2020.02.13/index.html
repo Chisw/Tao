@@ -6,6 +6,7 @@
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
   <link rel="stylesheet" href="./static/css/element.min.css">
+  <link rel="stylesheet" href="./static/css/tailwind.min.css">
   <link rel="shortcut icon" href="./static/favicon.ico">
 <style>
 
@@ -16,40 +17,133 @@
 }
 
 html, body {
-  background: #fafafa;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .tao-container {
+  margin: 0 auto;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 720px;
   min-width: 320px;
 }
 
-.tao-container .container-main {
-  width: 80%;
+@media screen and (max-width: 720px) {
+  .tao-container {
+    padding: 0;
+  }
+  .tao-video {
+    width: 100%;
+  }
 }
 
-.tao-container .container-main .main-list .list-item {
-  margin: 20px 0;
-}
-
+.bg-contain { background-size: contain; }
+.bg-cover { background-size: cover; }
 
 </style>
 </head>
 <body>
-<div id="tao">
+<div id="tao" class="absolute inset-0 overflow-y-scroll bg-gray-100">
 
   <div class="tao-container">
+
+    <div>
+      <h3>{{decodeURIComponent(config.title)}}</h3>
+      <h5>{{decodeURIComponent(config.description)}}</h5>
+    </div>
 
     <div class="container-main">
 
       <div class="main-list">
-        <el-card v-for="tao in taoListShow" class="list-item">
-          {{tao.content}}
-        </el-card>
+        <div v-for="tao in taoListShow" class="bg-white rounded shadow-md my-3 p-4">
+
+          <div class="flex">
+            <div class="pr-3">
+              <img :src="`./user_data/avatar/${config.qq}.jpeg`" class="block w-10 h-10 rounded-full" />
+            </div>
+            <div class="flex-grow">
+              <p class="text-base">{{friendMap[config.qq]}}</p>
+              <p class="text-xs text-gray-500">{{getDatetime(tao.created_time)}}</p>
+            </div>
+          </div>
+          
+          <!-- content -->
+          <p class="my-3 text-justify text-base text-gray-900">{{tao.content}}</p>
+
+          <div v-if="tao.pic.length" class="flex flex-wrap">
+            <div class="mr-1 mb-1 w-24 h-24" v-for="p in tao.pic">
+              <div
+                class="w-full h-full bg-center bg-no-repeat bg-cover cursor-pointer"
+                :style="`background-image:url('./user_data/media/${p}');`"
+              >
+              </div>
+            </div>
+          </div><!-- pic -->
+
+          <div v-if="tao.video.length">
+            <div class="tao-video w-1/2">
+              <video class="w-full" :src="`./user_data/media/${tao.video[0]}`" controls></video>
+            </div>
+          </div><!-- video -->
+
+          <div class="text-gray-600 text-xs mt-2">
+            <span v-if="tao.source_name" class="mr-2">
+              <i class="el-icon-mobile-phone"></i> {{tao.source_name}}
+            </span>
+            <span v-if="tao.lbs.name" class="mr-2">
+              <i class="el-icon-location-information"></i> {{tao.lbs.name}}
+            </span>
+            <span v-if="tao.personRead" class="mr-2">
+              <i class="el-icon-view"></i> 浏览 {{tao.personRead}} 次
+            </span>
+          </div>
+
+          <div v-if="tao.commentlist" class="mt-4 pt-4 text-sm border-t">
+            <div v-for="t in tao.commentlist" class="mb-3">
+              <div class="flex">
+                <img :src="`./user_data/avatar/${t.uin}.jpeg`" class="block w-8 h-8 rounded-full shadow" />
+                <div class="flex-grow pl-2 break-all">
+                  <p class="text-blue-700 cursor-pointer">{{friendMap[t.uin]}}</p>
+                  <p class="text-xs text-gray-500">{{t.createTime2}}</p>
+                  <p class="mt-1">{{t.content}}</p>
+                </div>
+              </div>
+              <div v-for="sub in t.list_3" class="ml-10 break-all bg-gray-200 rounded p-2 mt-2">
+                <p class="text-xs">
+                  <span class="text-blue-700 cursor-pointer">{{friendMap[sub.uin]}}</span> <span class="text-gray-500">回复：</span>
+                  <span class="float-right text-gray-400">{{sub.createTime2}}</span>
+                </p>
+                <p class="mt-1">{{cutAt(sub.content)}}</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- tao -->
+
+      </div><!-- .main-list -->
+
+      <div class="text-center">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="taoList.length"
+          :page-size="pageSize"
+          @current-change="updatePai"
+        >
+        </el-pagination>
       </div>
 
-    </div>
+
+    </div><!-- .container-main -->
+
+    <el-backtop
+      target="#tao"
+      :right="40"
+      :bottom="40"
+      :visibility-height="200"
+    >
+    </el-backtop>
 
   </div>
 
@@ -57,32 +151,60 @@ html, body {
 </body>
 <script src="./static/js/vue.min.js"></script>
 <script src="./static/js/element.min.js"></script>
+<script src="./static/js/luxon.min.js"></script>
 <script src="./user_data/data/taoList.js"></script>
 <script src="./user_data/data/friendMap.js"></script>
 <script src="./user_data/data/config.js"></script>
 <script>
 (function(){
 
-  var vm = new Vue({
+  window.addEventListener('load', () => {
 
-    el: '#tao',
+    const vm = new Vue({
 
-    data: {
-      pageSize: 20,
-      taoListShow: [],
-    },
+      el: '#tao',
 
-    created: function() {
-      this.taoListShow = taoList.slice(0, this.pageSize)
-    },
+      data: {
+        pageSize: 20,
+        taoListShow: [],
+      },
 
-    methods: {
+      created: function() {
+        this.init()
+      },
 
-    },
+      methods: {
+        init() {
+          document.title = decodeURIComponent(config.title)
+          this.taoListShow = taoList.slice(0, this.pageSize)
+        },
+        
+        getDatetime(s) {
+          const d = new Date(s * 1000)
+          return luxon.DateTime.fromJSDate(d).toFormat('yyyy年MM月dd日 hh:mm')
+        },
 
-  });
+        updatePai(p) {
+          const start = (p - 1) * this.pageSize
+          const end = start + this.pageSize
+          this.taoListShow = taoList.slice(start, end)
+        },
 
-  window.ji = vm;  // TODO: DELETE TEST CODE
+        cutAt(str) {
+          if (str.startsWith('@{')) {
+            const index = str.indexOf('}') + 1
+            return str.slice(index)
+          } else {
+            return str
+          }
+        },
+      },
+
+    });
+
+    window.ji = vm;  // TODO: DELETE TEST CODE
+
+  })
 
 }());
 </script>
