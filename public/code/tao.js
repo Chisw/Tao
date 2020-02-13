@@ -247,15 +247,13 @@ const config = {
 
       // zip emoji
       let emojis = []
-      taoList.map(({ content }) => {
-        const _emojis = content.match(/\[em\]e[0-9]*\[\/em\]/gi)
-        if (_emojis && _emojis.forEach) {
-          _emojis.forEach(emoji => {
-            const e = emoji.replace('[em]', '').replace('[/em]', '')
-            if (!emojis.includes(e)) emojis.push(e)
-          })
-        }
-      })
+      const _emojis = JSON.stringify(taoList).match(/\[em\]e[0-9]*\[\/em\]/gi)
+      if (_emojis && _emojis.length) {
+        _emojis.forEach(emoji => {
+          const e = emoji.replace('[em]', '').replace('[/em]', '')
+          if (!emojis.includes(e)) emojis.push(e)
+        })
+      }
       if (emojis.length) {
         let emojiIndex = 0
         do {
