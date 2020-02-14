@@ -25,11 +25,11 @@ html, body {
 .tao-container {
   margin: 0 auto;
   padding: 20px;
-  max-width: 720px;
+  max-width: 640px;
   min-width: 320px;
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 640px) {
   .tao-container {
     padding: 0;
   }
@@ -63,19 +63,32 @@ html, body {
               <img :src="`./user_data/avatar/${config.qq}.jpeg`" class="block w-10 h-10 rounded-full" />
             </div>
             <div class="flex-grow">
-              <p class="text-base">{{FM[config.qq]}}</p>
+              <p class="text-base" v-html="e(FM[config.qq])"></p>
               <p class="text-xs text-gray-500">{{getDatetime(tao.created_time)}}</p>
             </div>
             <div>
               <el-tooltip class="item" effect="dark" :content="`复制 ID: ${tao.tid}`" placement="left">
-                <el-button icon="el-icon-copy-document" size="mini" circle @click="copy(`'${tao.tid}'`)"></el-button>
+                <el-button icon="el-icon-copy-document" size="mini" circle @click="copy(tao.tid)"></el-button>
               </el-tooltip>
             </div>
           </div>
           
           <!-- content -->
-          <p class="my-3 text-justify text-base text-gray-900" v-html="e(tao.content)"></p>
+          <p class="my-3 text-justify text-base text-gray-900 break-all" v-html="e(tao.content)"></p>
 
+          <!-- repost -->
+          <div
+            v-if="tao.repost.content"
+            class="p-3 border-l-4 bg-gray-100 my-3 text-sm text-gray-600"
+          >
+            <p class="text-xs">
+              转发自<span class="text-blue-700 cursor-pointer" v-html="e(FM[tao.repost.qq])"></span>：
+              <span class="float-right text-gray-400">{{tao.repost.created_time}}</span>
+            </p>
+            <p class="mt-2" v-html="e(tao.repost.content)"></p>
+          </div>
+
+          <!-- pic -->
           <div v-if="tao.pic.length" class="flex flex-wrap">
             <div class="mr-1 mb-1 w-24 h-24" v-for="p in tao.pic">
               <div
@@ -84,14 +97,16 @@ html, body {
               >
               </div>
             </div>
-          </div><!-- pic -->
+          </div>
 
+          <!-- video -->
           <div v-if="tao.video.length">
             <div class="tao-video w-1/2">
               <video class="w-full" :src="`./user_data/media/${tao.video[0]}`" controls></video>
             </div>
-          </div><!-- video -->
+          </div>
 
+          <!-- info -->
           <div class="text-gray-600 text-xs mt-2">
             <span v-if="tao.source_name" class="mr-2">
               <i class="el-icon-mobile-phone"></i> {{tao.source_name}}
@@ -103,30 +118,32 @@ html, body {
               <i class="el-icon-view"></i> 浏览 {{tao.personRead}} 次
             </span>
           </div>
-
+          
+          <!-- like -->
           <div v-if="tao.likeCount > 0" class="text-sm mt-4 pt-4 border-t text-gray-600">
             {{tao.likeSelf ? '我' : ''}}
             {{tao.likeSelf && tao.likeList.length ? '和' : ''}}
             <span v-for="(qq, index) in tao.likeList">
-              {{index !== 0 ? '、' : ''}}<span class="text-blue-700 cursor-pointer">{{FM[qq]}}</span>
+              {{index !== 0 ? '、' : ''}}<span class="text-blue-700 cursor-pointer" v-html="e(FM[qq])"></span>
             </span>
             {{tao.likeCount}} 人觉得很赞
           </div>
 
+          <!-- commentlist -->
           <div v-if="tao.commentlist" class="mt-4 pt-4 text-sm border-t">
             <div v-for="t in tao.commentlist" class="mb-3">
               <div class="flex">
                 <img :src="`./user_data/avatar/${t.uin}.jpeg`" class="block w-8 h-8 rounded-full shadow" />
                 <div class="flex-grow pl-2 break-all">
-                  <p><span class="text-blue-700 cursor-pointer">{{FM[t.uin]}}</span></p>
+                  <p><span class="text-blue-700 cursor-pointer" v-html="e(FM[t.uin])"></span></p>
                   <p class="text-xs text-gray-500">{{t.createTime2}}</p>
                   <p class="mt-1" v-html="e(t.content)"></p>
                 </div>
               </div>
               <div v-for="sub in t.list_3" class="ml-10 break-all bg-gray-200 rounded p-2 mt-2">
                 <p class="text-xs">
-                  <span class="text-blue-700 cursor-pointer">{{FM[sub.uin]}}</span> <span class="text-gray-500">回复：</span>
-                  <span class="float-right text-gray-400">{{sub.createTime2}}</span>
+                  <span class="text-blue-700 cursor-pointer" v-html="e(FM[sub.uin])"></span> <span class="text-gray-500">回复：</span>
+                  <span class="float-right text-gray-500">{{sub.createTime2}}</span>
                 </p>
                 <p class="mt-1" v-html="e(cutAt(sub.content))"></p>
               </div>

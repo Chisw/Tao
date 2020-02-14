@@ -52,7 +52,7 @@
     },
 
     async fetchLikeListByTid(tid) {
-      return fetch(`https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/qz_opcnt2?unikey=http://user.qzone.qq.com/${this._qq}/mood/${tid}&g_tk=${this._token}`)
+      return fetch(`https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/qz_opcnt2?unikey=http://user.qzone.qq.com/${this._other || this._qq}/mood/${tid}&g_tk=${this._token}`)
         .then(res => res.text())
         .then(data => {
           try {
@@ -158,26 +158,29 @@
           })
         }
 
-        taoList.push({
-          tid,
-          content,
-          created_time,
-          lbs,
-          source_name,
-          pic: this.handlePicOrVideo(pic || [], tid),
-          video: this.handlePicOrVideo(video || [], tid),
-          commentlist,
-          likeList,
-          likeSelf: likedata ? Boolean(likedata.ilike) : false,
-          likeCount: likedata ? likedata.cnt || 0 : 0,
-          personRead: newdata ? (newdata.PRD || 0) : 0,
-          repost: {
-            content: rt_con ? (rt_con.content || '') : '',
-            created_time: rt_createTime,
-            source_name: rt_source_name,
-            qq: rt_uin,
-          }
-        })
+        if (!taoList.find(tao => tao.tid === tid)) {
+          taoList.push({
+            tid,
+            content,
+            created_time,
+            lbs,
+            source_name,
+            pic: this.handlePicOrVideo(pic || [], tid),
+            video: this.handlePicOrVideo(video || [], tid),
+            commentlist,
+            likeList,
+            likeSelf: likedata ? Boolean(likedata.ilike) : false,
+            likeCount: likedata ? likedata.cnt || 0 : 0,
+            personRead: newdata ? (newdata.PRD || 0) : 0,
+            repost: {
+              content: rt_con ? (rt_con.content || '') : '',
+              created_time: rt_createTime,
+              source_name: rt_source_name,
+              qq: rt_uin,
+            }
+          })
+        }
+
 
         msgIndex++
 
@@ -288,5 +291,7 @@ const config = {
   }
 
   window.Tao = Tao
-
+  console.clear()
+  Tao.log('Tao is ready.')
+  
 }());
