@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, InputGroup, Icon, Toaster } from '@blueprintjs/core'
+import { Button, InputGroup, Toaster } from '@blueprintjs/core'
 import step1 from '../../images/step1.png'
 import step2 from '../../images/step2.png'
 import step3 from '../../images/step3.png'
@@ -73,15 +73,6 @@ export default function StartPage() {
   return (
     <div>
 
-      <p className="text-gray-500">
-        1. 使用开发者工具
-        <Icon icon="caret-right" />
-        2. 使用 g_tk 获取代码段
-        <Icon icon="caret-right" />
-        3. 执行代码段
-      </p>
-
-
       {/* step 1 */}
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">使用开发者工具</h4>
@@ -147,7 +138,7 @@ export default function StartPage() {
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">已完成</h4>
-        <p className="mt-2 text-gray-600">请继续下载模板，以实现本地浏览数据。</p>
+        <p className="mt-2 text-gray-600">请继续下载模板，以实现本地使用。</p>
       </div>
 
     </div>
