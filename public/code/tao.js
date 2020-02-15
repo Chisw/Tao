@@ -188,7 +188,7 @@
       } while (msgIndex < all)
 
       const zip = new JSZip()
-      const docName = `tao_${this._other || this._qq}`
+      const docName = `user_data_${this._other || this._qq}`
       const folder = zip.folder(docName)
 
       // zip data
