@@ -14,6 +14,7 @@ export const userDataNodes: ITreeNode[] = [
         isExpanded: true,
         icon: 'folder-open',
         label: 'avatar',
+        secondaryLabel: '所有参与过评论、点赞的好友头像',
         childNodes: [
           {
             id: 'avatar1',
@@ -32,26 +33,31 @@ export const userDataNodes: ITreeNode[] = [
         isExpanded: true,
         icon: 'folder-open',
         label: 'data',
+        secondaryLabel: '所有文本数据',
         childNodes: [
           {
             id: 'config',
             icon: 'document',
             label: 'config.js',
+            secondaryLabel: '配置文件',
           },
           {
             id: 'friendMap',
             icon: 'document',
             label: 'friendMap.js',
+            secondaryLabel: 'QQ 号码/昵称 映射表',
           },
           {
             id: 'taoList',
             icon: 'document',
             label: 'taoList.js',
+            secondaryLabel: '处理后的所有说说记录',
           },
           {
             id: 'data',
             icon: 'document',
             label: 'data.json',
+            secondaryLabel: '抓取的原始数据，供纠错、二次开发',
           },
         ]
       },
@@ -61,6 +67,7 @@ export const userDataNodes: ITreeNode[] = [
         isExpanded: true,
         icon: 'folder-open',
         label: 'emoji',
+        secondaryLabel: '所有使用到的表情包',
         childNodes: [
           {
             id: 'emoji44',
@@ -79,6 +86,7 @@ export const userDataNodes: ITreeNode[] = [
         isExpanded: true,
         icon: 'folder-open',
         label: 'media',
+        secondaryLabel: '所有使用到的图片和视频',
         childNodes: [
           {
             id: 'media1',

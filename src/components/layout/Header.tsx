@@ -9,7 +9,7 @@ export default function Header() {
 
         <div className="pt-8 pb-6">
           <p className="text-4xl text-gray-800">滔 <code>TAO</code></p>
-          <p className="text-base text-gray-500 mt-2">保存 QQ 空间“说说”到本地，搭配模板可离线浏览、搜索</p>
+          <p className="text-base text-gray-500 mt-2">保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索</p>
         </div>
 
         <div className="pb-6 text-xs leading-loose">

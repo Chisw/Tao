@@ -134,33 +134,34 @@ export default function StartPage() {
         <p className="mt-2 text-gray-600">将 g_tk 值粘贴到下方输入框（如需抓取好友说说，请输入其 QQ），然后点击“获取代码段”</p>
       </div>
 
-      <div className="flex pb-4">
-        <div className="flex-grow pr-2">
-          <InputGroup
-            placeholder="请粘贴 g_tk 值"
-            value={token}
-            onChange={(e: any) => setToken(e.target.value)}
-          />
+      <div className="pb-4">
+        <div className="flex pb-2">
+          <div className="flex-grow">
+            <InputGroup
+              placeholder="请粘贴 g_tk 值"
+              value={token}
+              onChange={(e: any) => setToken(e.target.value)}
+            />
+          </div>
+          <div className="flex-grow pl-2">
+            <InputGroup
+              placeholder="请输入好友 QQ (非必填)"
+              value={qq}
+              onChange={(e: any) => setQq(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="flex-grow pr-2">
-          <InputGroup
-            placeholder="请输入好友 QQ (非必填)"
-            value={qq}
-            onChange={(e: any) => setQq(e.target.value)}
-          />
-        </div>
-        <div>
-          <Button
-            intent="success"
-            icon="code-block"
-            loading={!JSZipTxt || !FileSaverTxt || !TaoTxt}
-            disabled={!token}
-            onClick={copyCode}
-          >
-            获取代码段
-          </Button>
-        </div>
+        <Button
+          intent="success"
+          icon="code-block"
+          loading={!JSZipTxt || !FileSaverTxt || !TaoTxt}
+          disabled={!token}
+          onClick={copyCode}
+        >
+          获取代码段
+        </Button>
       </div>
+
 
       {/* step 4 */}
       <div className="pt-8 pb-4">
