@@ -52,7 +52,7 @@ export default function StartPage() {
 
   function QzoneUrl () {
     return (
-      <Tooltip content={<span className="text-xs">点击复制网址：https://qzone.qq.com</span>} position="top-left">
+      <Tooltip content={<span className="text-xs">点击复制网址：https://qzone.qq.com</span>} position="right">
         <span className="text-blue-600 cursor-pointer" onClick={copyUrl}>
           QQ 空间 
         </span>

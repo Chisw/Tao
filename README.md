@@ -1,44 +1,44 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tao
 
-## Available Scripts
+## 保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索
 
-In the project directory, you can run:
+[https://tao.jisuowei.com](https://tao.jisuowei.com) or short [http://t.jsw.im](http://t.jsw.im)
 
-### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+仓库代码主要分为三块
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## 一、抓取数据的代码段
 
-### `yarn test`
+由三部分拼接组成：
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- JSZip.js
+- FileSaver.js
+- tao.js
 
-### `yarn build`
+前两个为惯用的库，第三个为抓取步骤，纯 js 编写的，位于
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+./public/code/tao.js
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## 二、静态模板文件
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+用于本地离线浏览 user_data 中的数据，使用 Vue + Element 编写，位于
 
-### `yarn eject`
+```
+./public/template/v[DATE]/
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+完成一个版本后，将其压缩放至
+```
+./public/download/template_v[DATE].zip
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 三、网站首页
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+即此仓库 src ，使用 React + Blueprint + Tailwind 编写
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+yarn start
+yarn build
+```

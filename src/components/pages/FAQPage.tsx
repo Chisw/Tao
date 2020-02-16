@@ -7,8 +7,7 @@ export default function FAQPage() {
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">抓取数据安全吗，有没有隐私风险？</h4>
-        <p className="mt-4 text-gray-600">非常安全</p>
-        <p className="mt-2 text-gray-600">所有的数据请求都是发生在 QQ 空间 https 的域下，没有泄露的风险</p>
+        <p className="mt-4 text-gray-600">非常安全，所有的数据请求都是发生在 QQ 空间 https 的域下，没有泄露的风险</p>
         <p className="mt-2 text-gray-600">代码段只做了抓取、处理、压缩下载三件事，中途既没有、也无法泄露信息</p>
         <p className="mt-2 text-gray-600">源码托管在 GitHub 上，可供审查</p>
         <p className="mt-2 text-gray-600">
@@ -25,24 +24,24 @@ export default function FAQPage() {
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">刚执行代码段就报了一堆错怎么办？</h4>
         <p className="mt-4 text-gray-600">在控制台空白处中部，右击菜单选择“Clear console history”</p>
-        <p className="mt-2 text-gray-600">重写粘贴代码段，并回车执行</p>
+        <p className="mt-2 text-gray-600">重新粘贴代码段，并回车执行</p>
       </div>
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">为什么我输入了好友的 QQ 后无法抓取到 TA 的数据？</h4>
         <p className="mt-4 text-gray-600">你不在对方的好友列表中，或者对方的空间屏蔽了你的访问权限</p>
-        <p className="mt-2 text-gray-600">Tao 无法破解任何权限，Tao 只是一个普通的操作工</p>
+        <p className="mt-2 text-gray-600">Tao 无法破解任何权限，Tao 只是一个普通的打包操作工</p>
       </div>
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">为什么实际抓取到的好友说说数量比显示的数量少？</h4>
-        <p className="mt-4 text-gray-600">少掉的那部分的说说对你是不可见的</p>
+        <p className="mt-4 text-gray-600">少掉的那部分说说对你是不可见的</p>
       </div>
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">为什么提示我即将下载后，一直没反应？</h4>
         <p className="mt-4 text-gray-600">能到这一步，说明代码段执行的非常顺利</p>
-        <p className="mt-2 text-gray-600">图片、视频的总大小，以及你的设备性能，会直接影响到压缩的速度</p>
+        <p className="mt-2 text-gray-600">图片、视频的总大小，以及你的设备性能，会直接影响到压缩速度</p>
         <p className="mt-2 text-gray-600">请耐心等待，若超过五分钟都没有下载，建议更换性能更好的设备</p>
       </div>
 

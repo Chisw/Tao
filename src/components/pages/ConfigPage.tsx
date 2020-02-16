@@ -36,7 +36,7 @@ export default function ConfigPage() {
             icon="download"
             onClick={() => window.open(`https://www.sublimetext.com/`)}
           >
-            Sublime Text
+            下载 Sublime Text
           </Button>
         </p>
       </div>
