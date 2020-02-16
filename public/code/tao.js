@@ -1,5 +1,7 @@
 ;(function(){
 
+  const pageSize = 40
+
   const Tao = {
 
     _qq: 0,
@@ -33,7 +35,7 @@
       do {
         const res = await this.fetchMsgListByPos(pos)
         msgList = msgList.concat([...(res.msglist || [])])
-        pos = msgList.length
+        pos += pageSize
         this.log(`Fetching.. 【抓取说说记录】 [${pos}/${total}]`)
       } while (pos < total)
 
@@ -44,7 +46,7 @@
     },
 
     async fetchMsgListByPos(pos) {
-      return fetch(`https://user.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6?code_version=1&format=json&g_tk=${this._token}&pos=${pos}&num=40${this._other? `&uin=${this._other}` : ''}`)
+      return fetch(`https://user.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6?code_version=1&format=json&g_tk=${this._token}&pos=${pos}&num=${pageSize}${this._other? `&uin=${this._other}` : ''}`)
         .then(res => res.json())
         .then(data => {
           return data
