@@ -27,7 +27,7 @@ export default function StartPage() {
       .then(text => {
         setFileSaverTxt(text)
       })
-    fetch('/code/tao.js')
+    fetch(`/code/tao.js?tmp=${Date.now()}`)
       .then(res => res.text())
       .then(text => {
         setTaoTxt(text)

@@ -36,8 +36,8 @@
         const res = await this.fetchMsgListByPos(pos)
         msgList = msgList.concat([...(res.msglist || [])])
         pos += pageSize
-        this.log(`Fetching.. 【抓取说说记录】 [${pos}/${total}]`)
-      } while (pos < total)
+        this.log(`Fetching.. 【抓取说说记录】 [${msgList.length}/${total}]`)
+      } while (pos < (total + pageSize))
 
       setTimeout(async () => {
         await this.handleMsgList(msgList)
