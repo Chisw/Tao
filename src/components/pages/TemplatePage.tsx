@@ -12,6 +12,7 @@ export default function TemplatePage() {
           <a
             href="https://tao.jisuowei.com/download/template_v2020.02.13.zip"
             target="_blank"
+            rel="noopener noreferrer"
             className="text-blue-400 underline hover:text-blue-700"
           >
             https://tao.jisuowei.com/download/template_v2020.02.13.zip
@@ -41,7 +42,7 @@ export default function TemplatePage() {
       </div>
 
       <div className="pb-4">
-        <img src={use_template} className="shadow-lg" />
+        <img alt="img" src={use_template} className="shadow-lg" />
       </div>
 
       <div className="pt-8 pb-4">

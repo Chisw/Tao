@@ -23,9 +23,27 @@ export default function FAQPage() {
       </div>
 
       <div className="pt-8 pb-4">
+        <h4 className="text-2xl">刚执行代码段就报了一堆错怎么办？</h4>
+        <p className="mt-4 text-gray-600">在控制台空白处中部，右击菜单选择“Clear console history”</p>
+        <p className="mt-2 text-gray-600">重写粘贴代码段，并回车执行</p>
+      </div>
+
+      <div className="pt-8 pb-4">
         <h4 className="text-2xl">为什么我输入了好友的 QQ 后无法抓取到 TA 的数据？</h4>
         <p className="mt-4 text-gray-600">你不在对方的好友列表中，或者对方的空间屏蔽了你的访问权限</p>
         <p className="mt-2 text-gray-600">Tao 无法破解任何权限，Tao 只是一个普通的操作工</p>
+      </div>
+
+      <div className="pt-8 pb-4">
+        <h4 className="text-2xl">为什么实际抓取到的好友说说数量比显示的数量少？</h4>
+        <p className="mt-4 text-gray-600">少掉的那部分的说说对你是不可见的</p>
+      </div>
+
+      <div className="pt-8 pb-4">
+        <h4 className="text-2xl">为什么提示我即将下载后，一直没反应？</h4>
+        <p className="mt-4 text-gray-600">能到这一步，说明代码段执行的非常顺利</p>
+        <p className="mt-2 text-gray-600">图片、视频的总大小，以及你的设备性能，会直接影响到压缩的速度</p>
+        <p className="mt-2 text-gray-600">请耐心等待，若超过五分钟都没有下载，建议更换性能更好的设备</p>
       </div>
 
       <div className="pt-8 pb-4">
@@ -54,6 +72,11 @@ export default function FAQPage() {
         <p className="mt-2 text-gray-600">找到说说原始数据中的 video[0].url3 字段，是原始视频地址</p>
         <p className="mt-2 text-gray-600">设法下载该视频，并重命名为弹框中的文件名，放入 user_data/media 中即可</p>
         <p className="mt-2 text-gray-600">该情形基本发生于原始视频无法下载，才导致 Tao 无法将其压缩到数据包内</p>
+      </div>
+
+      <div className="pt-8 pb-4">
+        <h4 className="text-2xl">有新的模板包发布后，该如何使用？</h4>
+        <p className="mt-4 text-gray-600">将旧的 user_data 照例拖入新的模板文件夹中即可</p>
       </div>
 
       <div className="pt-8 pb-4">

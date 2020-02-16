@@ -67,7 +67,7 @@ export const userDataNodes: ITreeNode[] = [
         isExpanded: true,
         icon: 'folder-open',
         label: 'emoji',
-        secondaryLabel: '所有使用到的表情',
+        secondaryLabel: '所有使用到的表情包',
         childNodes: [
           {
             id: 'emoji44',

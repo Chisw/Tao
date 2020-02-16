@@ -8,6 +8,11 @@
 @import "~tailwindcss/components.css";
 @import "~tailwindcss/utilities.css";
 
+p {
+  word-break: break-all;
+  text-align: justify;
+}
+
 .tao-center {
   margin: 0 auto;
   max-width: 640px;
@@ -22,5 +27,12 @@
 }
 
 .tao-bg-dark {
-  background-color: #f1a308;;
+  background-color: #f1a308;
+  ;
+}
+
+@media screen and (max-width: 640px) {
+  .tao-center {
+    padding: 0 1rem;
+  }
 }

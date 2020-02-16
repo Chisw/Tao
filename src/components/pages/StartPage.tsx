@@ -114,7 +114,7 @@ export default function StartPage() {
       </div>
 
       <div className="pb-4">
-        <img src={step1} className="shadow-lg" />
+        <img alt="img" src={step1} className="shadow-lg" />
       </div>
 
       {/* step 2 */}
@@ -125,7 +125,7 @@ export default function StartPage() {
       </div>
 
       <div className="pb-4">
-        <img src={step2} className="shadow-lg" />
+        <img alt="img" src={step2} className="shadow-lg" />
       </div>
 
       {/* step 3 */}
@@ -173,7 +173,7 @@ export default function StartPage() {
       </div>
 
       <div className="pb-4">
-        <img src={step3} className="shadow-lg" />
+        <img alt="img" src={step3} className="shadow-lg" />
       </div>
 
 
