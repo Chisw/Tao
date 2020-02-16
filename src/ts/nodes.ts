@@ -51,7 +51,7 @@ export const userDataNodes: ITreeNode[] = [
             id: 'taoList',
             icon: 'document',
             label: 'taoList.js',
-            secondaryLabel: '处理后的所有说说记录',
+            secondaryLabel: '所有处理后的说说记录',
           },
           {
             id: 'data',
@@ -67,7 +67,7 @@ export const userDataNodes: ITreeNode[] = [
         isExpanded: true,
         icon: 'folder-open',
         label: 'emoji',
-        secondaryLabel: '所有使用到的表情包',
+        secondaryLabel: '所有使用到的表情',
         childNodes: [
           {
             id: 'emoji44',

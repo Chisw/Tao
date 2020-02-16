@@ -29,7 +29,7 @@ export default function ConfigPage() {
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">配置文件</h4>
         <p className="mt-2 text-gray-600">为保证数据的完整性，建议修改都发生在 user_data/data/config.js 中</p>
-        <p className="mt-2 text-gray-600">建议使用轻量级的 Sublime 编辑器打开进行编辑</p>
+        <p className="mt-2 text-gray-600">建议使用轻量级的 Sublime Text 编辑器打开进行编辑</p>
         <p className="mt-2 text-gray-600">
           <Button
             small
