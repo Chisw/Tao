@@ -8,7 +8,7 @@ export default function Header() {
     <div className="z-30 top-0 w-full bg-gray-800">
       <div className="tao-center flex">
 
-        <div>
+        <div className="flex-grow">
           <div className="pt-8 pb-6">
             <p className="text-4xl text-gray-200">滔 <code>TAO</code></p>
             <p className="text-base text-gray-600 mt-2">保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索</p>
