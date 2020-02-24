@@ -12,8 +12,8 @@ export default function Header() {
         <div className="flex-grow">
           <div className="pt-8 pb-6">
             <p className="w-32"><img src={logo} alt="logo" /></p>
-            <p className="text-base text-gray-500 mt-4">保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索</p>
-            <p className="text-base text-gray-500 mt-1">新增数据统计、图表展示</p>
+            <p className="text-base text-gray-500 mt-4">保存 QQ 空间“说说”内容到本地</p>
+            <p className="text-base text-gray-500 mt-1">配合模板可离线浏览、搜索</p>
           </div>
 
           <div className="pb-6 text-xs leading-loose">

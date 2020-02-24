@@ -10,25 +10,23 @@ export default function TemplatePage() {
         <h4 className="text-2xl">下载</h4>
         <p className="mt-2">
           <a
-            href="https://tao.jisuowei.com/download/template_v2020.02.13.zip"
+            href="https://tao.jisuowei.com/download/template_v2020.02.24.zip"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-400 underline hover:text-blue-700"
           >
-            https://tao.jisuowei.com/download/template_v2020.02.13.zip
+            https://tao.jisuowei.com/download/template_v2020.02.24.zip
           </a>
           <Tag intent="success" round className="ml-2">NEW</Tag>
         </p>
-        <p className="mt-2 text-gray-600">- 支持分页</p>
         <p className="mt-2 text-gray-600">- 支持离线浏览、搜索</p>
-        <p className="mt-2 text-gray-600">- 支持格式化日期搜索</p>
+        <p className="mt-2 text-gray-600">- 支持分页、格式化日期搜索</p>
         <p className="mt-2 text-gray-600">- 支持发布设备、发布位置、浏览次数、点赞好友的显示</p>
-        <p className="mt-2 text-gray-600">- 支持隐藏指定说说</p>
         <p className="mt-2 text-gray-600">- 支持好友别名、复制 QQ、发送邮件跳转、访问空间跳转</p>
-        <p className="mt-2 text-gray-600">- 支持黑名单</p>
-        <p className="mt-2 text-gray-600">- 支持资源丢失提示</p>
+        <p className="mt-2 text-gray-600">- 支持黑名单功能、@好友显示</p>
         <p className="mt-2 text-gray-600">- 支持移动端适配、滑动浏览图片</p>
-        <p className="mt-2 text-gray-600">- 支持@好友显示</p>
+        <p className="mt-2 text-gray-600">- 支持隐藏指定说说</p>
+        <p className="mt-2 text-gray-600">- 支持资源丢失提示</p>
       </div>
 
       <div className="pt-8 pb-4">
