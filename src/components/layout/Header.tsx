@@ -13,6 +13,7 @@ export default function Header() {
           <div className="pt-8 pb-6">
             <p className="w-32"><img src={logo} alt="logo" /></p>
             <p className="text-base text-gray-500 mt-4">保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索</p>
+            <p className="text-base text-gray-500 mt-1">新增数据统计、图表展示</p>
           </div>
 
           <div className="pb-6 text-xs leading-loose">
@@ -26,7 +27,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="relative pl-4 w-1/3">
+        <div className="relative ml-4 w-1/3">
           <img alt="demo" src={demo} className="absolute bottom-0" />
         </div>
 

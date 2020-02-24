@@ -141,10 +141,17 @@
           rt_uinname,
         } = msg
 
+        friendMap[this._qq] = this._name
+
+        // qq in comment and subComment
         ;(commentlist || []).forEach(c => {
           if (!friendMap[c.uin]) friendMap[c.uin] = c.name
+            ;(c.list_3 || []).forEach(({ uin, name }) => {
+              if (uin && name && !friendMap[uin]) friendMap[uin] = name
+            })
         })
 
+        // qq in repost
         if (rt_uin && rt_uinname && !friendMap[rt_uin]) {
           friendMap[rt_uin] = rt_uinname
         }
@@ -152,6 +159,7 @@
         const likeList = []
         const like = await this.fetchLikeListByTid(tid)
         const { likedata, newdata } = like
+        // qq in likeList
         if (likedata && likedata.list) {
           likedata.list.forEach(l => {
             const [qq, name] = l
@@ -188,13 +196,24 @@
         this.log(`Handling likeList.. 【抓取点赞记录】 [${msgIndex}/${all}]`)
       } while (msgIndex < all)
 
+      // qq in atString
+      const taoListJSONStr = JSON.stringify(taoList)
+      taoListJSONStr
+        .split(/@\{|\}/)
+        .filter(s => s.includes('uin:') && s.includes('nick:'))
+        .forEach(s => {
+          const qq = (s.match(/[0-9]*/g) || []).find(s => s !== '')
+          const name = (s.split('nick:')[1] || '').split(',who')[0]
+          if (qq && name && !friendMap[qq]) friendMap[qq] = name
+        })
+
       const zip = new JSZip()
       const docName = `user_data_${this._other || this._qq}`
       const folder = zip.folder(docName)
 
       // zip data
       folder.file(`data/data.json`, JSON.stringify(msgList))
-      folder.file(`data/taoList.js`, 'const taoList = ' + JSON.stringify(taoList))
+      folder.file(`data/taoList.js`, 'const taoList = ' + taoListJSONStr)
       folder.file(`data/friendMap.js`, 'const friendMap = ' + JSON.stringify(friendMap))
       folder.file(`data/config.js`, `
 const config = {
@@ -251,7 +270,7 @@ const config = {
 
       // zip emoji
       let emojis = []
-      const _emojis = JSON.stringify(taoList).match(/\[em\]e[0-9]*\[\/em\]/gi)
+      const _emojis = taoListJSONStr.match(/\[em\]e[0-9]*\[\/em\]/gi)
       if (_emojis && _emojis.length) {
         _emojis.forEach(emoji => {
           const e = emoji.replace('[em]', '').replace('[/em]', '')
