@@ -2,6 +2,7 @@ import React from 'react'
 import { DateTime } from 'luxon'
 import farewell from '../../images/farewell.gif'
 import demo from '../../images/demo.png'
+import logo from '../../images/logo.png'
 
 export default function Header() {
   return (
@@ -10,8 +11,8 @@ export default function Header() {
 
         <div className="flex-grow">
           <div className="pt-8 pb-6">
-            <p className="text-4xl text-gray-200">滔 <code>TAO</code></p>
-            <p className="text-base text-gray-600 mt-2">保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索</p>
+            <p className="w-32"><img src={logo} alt="logo" /></p>
+            <p className="text-base text-gray-500 mt-4">保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索</p>
           </div>
 
           <div className="pb-6 text-xs leading-loose">
@@ -25,8 +26,8 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="relative pl-4" style={{ maxWidth: '33%' }}>
-          <img alt="demo" src={demo} className="mt-12" />
+        <div className="relative pl-4 w-1/3">
+          <img alt="demo" src={demo} className="absolute bottom-0" />
         </div>
 
       </div>

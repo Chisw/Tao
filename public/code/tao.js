@@ -183,7 +183,6 @@
           })
         }
 
-
         msgIndex++
 
         this.log(`Handling likeList.. 【抓取点赞记录】 [${msgIndex}/${all}]`)
