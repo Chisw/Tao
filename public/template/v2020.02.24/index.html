@@ -129,9 +129,9 @@ html, body {
           </div>
           
           <!-- content -->
-          <p class="my-3 text-justify text-base text-gray-900 break-all" v-html="e(tao.content)"></p>
+          <p class="my-3 text-justify text-base text-gray-900 break-all" v-html="e(showAt(tao.content))"></p>
 
-          <!-- repost -->
+          <!-- rePost -->
           <div
             v-if="tao.repost.content"
             class="p-3 border-l-4 bg-gray-100 my-3 text-sm text-gray-600"
@@ -140,7 +140,7 @@ html, body {
               转发自<span class="text-blue-700 cursor-pointer" :data-qq="tao.repost.qq" v-html="e(FM[tao.repost.qq])"></span>：
               <span class="float-right text-gray-400">{{tao.repost.created_time}}</span>
             </p>
-            <p class="mt-2" v-html="e(tao.repost.content)"></p>
+            <p class="mt-2" v-html="e(showAt(tao.repost.content))"></p>
           </div>
 
           <!-- pic -->
@@ -201,7 +201,7 @@ html, body {
                   <span class="text-blue-700 cursor-pointer" :data-qq="sub.uin" v-html="e(FM[sub.uin])"></span> <span class="text-gray-500">回复：</span>
                   <span class="float-right text-gray-500">{{sub.createTime2}}</span>
                 </p>
-                <p class="mt-1" v-html="e(cutAt(sub.content))"></p>
+                <p class="mt-1" v-html="e(showAt(cutAt(sub.content)))"></p>
               </div>
             </div>
           </div>
@@ -367,7 +367,7 @@ html, body {
           atList.forEach(at => {
             const qq = (at.match(/[0-9]*/g) || []).find(s => s !== '')
             const atStr = `@{${at}}`
-            str = str.replace(atStr, `<span class="text-blue-700 cursor-pointer" data-qq="${qq}">@${this.FM[qq]}</span>`)
+            str = str.replace(atStr, `<span class="text-blue-700 cursor-pointer mr-1" data-qq="${qq}">@${this.FM[qq]}</span>`)
           })
           return str
         },

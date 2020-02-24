@@ -15,6 +15,8 @@ export default function StartPage() {
   const [token, setToken] = useState('')
   const [qq, setQq] = useState('')
 
+  const [copyLoading, setCopyLoading] = useState(false)
+
   useEffect(() => {
 
     fetch('/code/JSZip.txt')
@@ -79,6 +81,7 @@ export default function StartPage() {
       })
       return
     }
+    setCopyLoading(true)
 
     const exec = `Tao.get(${token}${qq ? `,${qq}` : ''});`
     const input = document.createElement('textarea')
@@ -93,6 +96,7 @@ export default function StartPage() {
       icon: 'tick',
       intent: 'success',
     })
+    setCopyLoading(false)
   }
   
   return (
@@ -131,7 +135,7 @@ export default function StartPage() {
       {/* step 3 */}
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">获取代码段</h4>
-        <p className="mt-2 text-gray-600">将 g_tk 值粘贴到下方输入框（如需抓取好友说说，请输入其 QQ），然后点击“获取代码段”</p>
+        <p className="mt-2 text-gray-600">将 g_tk 值粘贴到下方输入框（如需抓取好友说说，请再输入好友 QQ），然后点击“获取代码段”</p>
       </div>
 
       <div className="pb-4">
@@ -154,7 +158,7 @@ export default function StartPage() {
         <Button
           intent="success"
           icon="code-block"
-          loading={!JSZipTxt || !FileSaverTxt || !TaoTxt}
+          loading={!JSZipTxt || !FileSaverTxt || !TaoTxt || copyLoading}
           disabled={!token}
           onClick={copyCode}
         >
