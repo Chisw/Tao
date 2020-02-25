@@ -67,10 +67,10 @@ export default function FAQPage() {
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">弹框提示视频文件缺失该怎么办？</h4>
-        <p className="mt-4 text-gray-600">复制说说的 ID，并前往 user_data/data/data.json 中搜索</p>
-        <p className="mt-2 text-gray-600">找到说说原始数据中的 video[0].url3 字段，是原始视频地址</p>
-        <p className="mt-2 text-gray-600">设法下载该视频，并重命名为弹框中的文件名，放入 user_data/media 中即可</p>
-        <p className="mt-2 text-gray-600">该情形基本发生于原始视频无法下载，才导致 Tao 无法将其压缩到数据包内</p>
+        <p className="mt-4 text-gray-600">复制弹框中的文件名，并前往 user_data/data/error.txt 中搜索</p>
+        <p className="mt-2 text-gray-600">找到对应文件名箭头“=>”后的链接，是原始视频地址</p>
+        <p className="mt-2 text-gray-600">设法下载该视频，并重命名为文件名，放入 user_data/media 中即可</p>
+        <p className="mt-2 text-gray-600">该情形基本发生于原始视频无法下载，导致 Tao 无法将其压缩到数据包内</p>
       </div>
 
       <div className="pt-8 pb-4">

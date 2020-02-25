@@ -38,6 +38,12 @@ export const userDataNodes: ITreeNode[] = [
           {
             id: 'config',
             icon: 'document',
+            label: 'error.txt',
+            secondaryLabel: '媒体文件获取失败列表',
+          },
+          {
+            id: 'config',
+            icon: 'document',
             label: 'config.js',
             secondaryLabel: '配置文件',
           },

@@ -9,6 +9,7 @@
     _token: '',
     _binary: [],
     _other: 0,
+    _error: [],
 
     log(info) {
       console.log(`[TaoLog-${new Date().toLocaleString()}]`, info)
@@ -211,28 +212,6 @@
       const docName = `user_data_${this._other || this._qq}`
       const folder = zip.folder(docName)
 
-      // zip data
-      folder.file(`data/data.json`, JSON.stringify(msgList))
-      folder.file(`data/taoList.js`, 'const taoList = ' + taoListJSONStr)
-      folder.file(`data/friendMap.js`, 'const friendMap = ' + JSON.stringify(friendMap))
-      folder.file(`data/config.js`, `
-const config = {
-  title: '${this._other || encodeURIComponent(document.title)}',
-  description: '${this._other || encodeURIComponent(document.querySelector('meta[name="description"]').getAttribute('content'))}',
-  qq: ${this._other || this._qq},
-  name: '${this._other || encodeURIComponent(this._name)}',
-  hide: [
-    // '603******************700',
-  ],
-  alias: {
-    // '3210123456': '张三',
-  },
-  blacklist: [
-    // 3210123456,
-  ]
-}
-`)
-
       // zip pic and video
       if (this._binary.length) {
         let binaryIndex = 0
@@ -245,6 +224,7 @@ const config = {
             await folder.file(`media/${name}`, buff, { base64: true })
           } catch(error) {
             this.log(`${error} - media/${name} fetch failed.`)
+            this._error.push(`media/${name} => ${url}`)
           }
           binaryIndex++
         } while (binaryIndex < this._binary.length)
@@ -262,7 +242,8 @@ const config = {
             const base64 = await this.fetchAvatarBase64(qq)
             await folder.file(`avatar/${qq}.jpeg`, base64, { base64: true })
           } catch(error) {
-            this.log(`${error} - media/${name} fetch failed.`)
+            this.log(`${error} - avatar/${name} fetch failed.`)
+            this._error.push(`avatar/${qq}.jpeg => https://q1.qlogo.cn/g?b=qq&nk=${qq}&s=640`)
           }
           avatarIndex++
         } while (avatarIndex < qqList.length)
@@ -288,10 +269,34 @@ const config = {
             await folder.file(`emoji/${emoNo}.gif`, buff, { base64: true })
           } catch (error) {
             this.log(`${error} - emoji/${emoNo} fetch failed.`)
+            this._error.push(`emoji/${emoNo}.gif => ${url}`)
           }
           emojiIndex++
         } while (emojiIndex < emojis.length)
       }
+
+      // zip data
+      folder.file(`data/data.json`, JSON.stringify(msgList))
+      folder.file(`data/taoList.js`, 'const taoList = ' + taoListJSONStr)
+      folder.file(`data/friendMap.js`, 'const friendMap = ' + JSON.stringify(friendMap))
+      folder.file(`data/error.txt`, this._error.join('\n'))
+      folder.file(`data/config.js`, `
+const config = {
+  title: '${this._other || encodeURIComponent(document.title)}',
+  description: '${this._other || encodeURIComponent(document.querySelector('meta[name="description"]').getAttribute('content'))}',
+  qq: ${this._other || this._qq},
+  name: '${this._other || encodeURIComponent(this._name)}',
+  hide: [
+    '603******************700',
+  ],
+  alias: {
+    '3210123456': '张三',
+  },
+  blacklist: [
+    3210123456,
+  ]
+}
+`)
 
       this.log(`Preparing to download, please wait a moment..`)
 
@@ -306,6 +311,7 @@ const config = {
           this._token = ''
           this._binary = []
           this._other = 0
+          this._error = []
         })
     },
   }
