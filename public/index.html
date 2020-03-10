@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-    <meta
-      name="description"
-      content="Tao tao.jisuowei.com jisuowei.com"
-    />
     <title>Tao - Farewell, Taotao of QQ!</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+    <meta name="description" content="Tao tao.jisuowei.com jisuowei.com"/>
+    <script>
+      if (location.href.startsWith('http://tao')) location.href = 'https://tao.jisuowei.com'
+    </script>
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
-  <script>
-    if (location.href.startsWith('http://tao')) location.href = 'https://tao.jisuowei.com'
-  </script>
 </html>
