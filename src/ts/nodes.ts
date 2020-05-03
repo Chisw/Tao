@@ -36,7 +36,7 @@ export const userDataNodes: ITreeNode[] = [
         secondaryLabel: '所有文本数据',
         childNodes: [
           {
-            id: 'config',
+            id: 'error',
             icon: 'document',
             label: 'error.txt',
             secondaryLabel: '媒体文件获取失败列表',

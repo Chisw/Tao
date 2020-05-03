@@ -83,20 +83,22 @@ export default function StartPage() {
     }
     setCopyLoading(true)
 
-    const exec = `Tao.get(${token}${qq ? `,${qq}` : ''});`
-    const input = document.createElement('textarea')
-    document.body.appendChild(input)
-    input.value = `${JSZipTxt}\n${FileSaverTxt}\n${TaoTxt}\n${exec}\n`
-    input.select()
-    document.execCommand('Copy')
-    document.body.removeChild(input)
-    toaster.show({
-      message: '已复制代码段到剪切板',
-      timeout: 3000,
-      icon: 'tick',
-      intent: 'success',
-    })
-    setCopyLoading(false)
+    setTimeout(() => {
+      const exec = `Tao.get(${token}${qq ? `,${qq}` : ''});`
+      const input = document.createElement('textarea')
+      document.body.appendChild(input)
+      input.value = `${JSZipTxt}\n${FileSaverTxt}\n${TaoTxt}\n${exec}\n`
+      input.select()
+      document.execCommand('Copy')
+      document.body.removeChild(input)
+      toaster.show({
+        message: '复制成功',
+        timeout: 3000,
+        icon: 'tick',
+        intent: 'success',
+      })
+      setCopyLoading(false)
+    }, 20)
   }
   
   return (
@@ -138,8 +140,8 @@ export default function StartPage() {
       </div>
 
       <div className="pb-4">
-        <div className="flex pb-2">
-          <div className="flex-grow">
+        <div className="flex flex-wrap md:flex-no-wrap pb-2">
+          <div className="w-full md:w-1/2">
             <InputGroup
               placeholder="请粘贴 g_tk 值"
               value={token}
@@ -157,7 +159,7 @@ export default function StartPage() {
               )}
             />
           </div>
-          <div className="flex-grow pl-2">
+          <div className="w-full md:w-1/2 pl-0 md:pl-2 pt-2 md:pt-0">
             <InputGroup
               placeholder="请输入好友 QQ (非必填)"
               value={qq}
