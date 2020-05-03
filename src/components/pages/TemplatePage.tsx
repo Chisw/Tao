@@ -2,20 +2,22 @@ import React from 'react'
 import use_template from '../../images/use_template.gif'
 import { Tag, Button } from '@blueprintjs/core'
 
+const latest = `https://tao.jisuowei.com/download/template_v2020.05.03.zip`
+
 export default function TemplatePage() {
   return (
     <div>
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">下载</h4>
-        <p className="mt-2">
+        <p className="mt-2 py-2 flex items-center">
           <a
-            href="https://tao.jisuowei.com/download/template_v2020.02.24.zip"
+            href={latest}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-400 underline hover:text-blue-700"
           >
-            https://tao.jisuowei.com/download/template_v2020.02.24.zip
+            {latest}
           </a>
           <Tag intent="success" round className="ml-2">NEW</Tag>
         </p>
