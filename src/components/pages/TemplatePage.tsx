@@ -50,7 +50,6 @@ export default function TemplatePage() {
         <p className="mt-2 text-gray-600">推荐使用 Anywhere npm 包</p>
         <p className="mt-2 text-gray-600">
           <Button
-            small
             icon="link"
             onClick={() => window.open(`https://www.npmjs.com/package/anywhere`)}
           >
@@ -65,7 +64,6 @@ export default function TemplatePage() {
         <p className="mt-2 text-gray-600">一键映射本地服务到外网，发送网址给任何人访问</p>
         <p className="mt-2 text-gray-600">
           <Button
-            small
             icon="link"
             onClick={() => window.open(`https://u.tools/`)}
           >

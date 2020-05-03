@@ -108,7 +108,6 @@ export default function StartPage() {
         <p className="mt-2 text-gray-600">打开 Chrome 浏览器中的“控制 / 更多工具 / 开发者工具”</p>
         <p className="mt-2 text-gray-600">
           <Button
-            small
             icon="download"
             onClick={() => window.open(`https://www.google.cn/intl/zh-CN/chrome/`)}
           >
@@ -145,6 +144,17 @@ export default function StartPage() {
               placeholder="请粘贴 g_tk 值"
               value={token}
               onChange={(e: any) => setToken(e.target.value)}
+              rightElement={(
+                token.length ? (
+                  <Button
+                    minimal
+                    icon="cross"
+                    onClick={() => setToken('')}
+                  />
+                ) : (
+                  <></>
+                )
+              )}
             />
           </div>
           <div className="flex-grow pl-2">
@@ -152,6 +162,17 @@ export default function StartPage() {
               placeholder="请输入好友 QQ (非必填)"
               value={qq}
               onChange={(e: any) => setQq(e.target.value)}
+              rightElement={(
+                qq.length ? (
+                  <Button
+                    minimal
+                    icon="cross"
+                    onClick={() => setQq('')}
+                  />
+                ) : (
+                    <></>
+                  )
+              )}
             />
           </div>
         </div>

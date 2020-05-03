@@ -1,6 +1,6 @@
 # Tao
 
-## 保存 QQ 空间“说说”到本地，配合模板可离线浏览、搜索
+## 归档 QQ 空间 “说说”，保存至本地，可离线浏览、搜索
 
 [https://tao.jisuowei.com](https://tao.jisuowei.com) or short [http://t.jsw.im](http://t.jsw.im)
 

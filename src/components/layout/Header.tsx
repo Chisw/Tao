@@ -12,11 +12,11 @@ export default function Header() {
         <div className="flex-grow">
           <div className="pt-8 pb-6">
             <p className="w-32"><img src={logo} alt="logo" /></p>
-            <p className="text-base text-gray-500 mt-4">保存 QQ 空间“说说”内容到本地</p>
-            <p className="text-base text-gray-500 mt-1">配合模板可离线浏览、搜索</p>
+            <p className="text-base text-gray-500 font-light mt-4">归档 QQ 空间 “说说” </p>
+            <p className="text-base text-gray-500 font-light mt-1">保存至本地，可离线浏览、搜索</p>
           </div>
 
-          <div className="pb-6 text-xs leading-loose">
+          <div className="pb-6 text-xs leading-loose font-light">
             <p className="text-gray-600">2007年8月13日，腾讯实验室的新产品—滔滔，正式上线公测</p>
             <p className="text-gray-500">2010年1月26日，腾讯发出滔滔业务调整公告，将滔滔整合进 QQ 空间心情</p>
             <p className="text-gray-400">2010年5月19日，QQ 空间心情更名为“说说”</p>

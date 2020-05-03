@@ -12,7 +12,6 @@ export default function FAQPage() {
         <p className="mt-2 text-gray-600">源码托管在 GitHub 上，可供审查</p>
         <p className="mt-2 text-gray-600">
           <Button
-            small
             icon="link"
             onClick={() => window.open(`https://github.com/chisw/Tao`)}
           >
