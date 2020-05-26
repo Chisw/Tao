@@ -70,6 +70,7 @@ export default function FAQPage() {
         <p className="mt-2 text-gray-600">找到对应文件名箭头“=&gt;”后的链接，是原始视频地址</p>
         <p className="mt-2 text-gray-600">设法下载该视频，并重命名为文件名，放入 user_data/media 中即可</p>
         <p className="mt-2 text-gray-600">该情形基本发生于原始视频无法下载，导致 Tao 无法将其压缩到数据包内</p>
+        <p className="mt-2 text-gray-600">将链接中的 https:// 换成 http://，可以解决大多数无法下载的情况</p>
       </div>
 
       <div className="pt-8 pb-4">
