@@ -15,7 +15,23 @@
       console.log(`[TaoLog-${new Date().toLocaleString()}]`, info)
     },
 
-    async get(token, other) {
+    getGTK(str) {
+      let hash = 5381
+      for (let i = 0, len = str.length; i < len; ++i) {
+        hash += (hash << 5) + str.charAt(i).charCodeAt()
+      }
+      return hash & 0x7fffffff
+    },
+
+    async get(other) {
+
+      const p_skey = document.cookie.split(';').find(s => s.includes('p_skey'))
+      const token = (p_skey && p_skey.includes('=')) ? this.getGTK(p_skey.split('=').reverse()[0]) : ''
+
+      if (!token) {
+        this.log('未检测到合法 g_tk 值，请联系开发者')
+        return
+      }
 
       this._token = token
       this._other = other
@@ -39,6 +55,11 @@
         pos += pageSize
         this.log(`Fetching.. 【抓取说说记录】 [${msgList.length}/${total}]`)
       } while (pos < (total + pageSize))
+
+      if (!msgList || !msgList.length) {
+        this.log('未检测到说说记录')
+        return
+      }
 
       setTimeout(async () => {
         await this.handleMsgList(msgList)

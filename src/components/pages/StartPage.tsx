@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Button, InputGroup, Toaster, Tooltip } from '@blueprintjs/core'
+import { Button, InputGroup, Toaster, KeyCombo } from '@blueprintjs/core'
 import step1 from '../../images/step1.png'
-import step2 from '../../images/step2.png'
 import step3 from '../../images/step3.png'
 
 const toaster = Toaster.create({ position: 'top' })
@@ -12,7 +11,6 @@ export default function StartPage() {
   const [FileSaverTxt, setFileSaverTxt] = useState('')
   const [TaoTxt, setTaoTxt] = useState('')
 
-  const [token, setToken] = useState('')
   const [qq, setQq] = useState('')
 
   const [copyLoading, setCopyLoading] = useState(false)
@@ -37,41 +35,7 @@ export default function StartPage() {
 
   }, [])
 
-  const copyUrl = () => {
-    const input = document.createElement('textarea')
-    document.body.appendChild(input)
-    input.value = `https://qzone.qq.com`
-    input.select()
-    document.execCommand('Copy')
-    document.body.removeChild(input)
-    toaster.show({
-      message: '复制成功',
-      timeout: 3000,
-      icon: 'tick',
-      intent: 'success',
-    })
-  }
-
-  function QzoneUrl () {
-    return (
-      <Tooltip content={<span className="text-xs">点击复制网址：https://qzone.qq.com</span>} position="right">
-        <span className="text-blue-600 cursor-pointer" onClick={copyUrl}>
-          QQ 空间 
-        </span>
-      </Tooltip>
-    )
-  }
-
   const copyCode = () => {
-    if (!/^[0-9]*$/.test(token)) {
-      toaster.show({
-        message: 'g_tk 不合法',
-        timeout: 3000,
-        icon: 'error',
-        intent: 'danger',
-      })
-      return
-    }
     if (qq && !/^[0-9]*$/.test(qq)) {
       toaster.show({
         message: 'QQ 不合法',
@@ -84,7 +48,7 @@ export default function StartPage() {
     setCopyLoading(true)
 
     setTimeout(() => {
-      const exec = `Tao.get(${token}${qq ? `,${qq}` : ''});`
+      const exec = `Tao.get(${qq ? `${qq}` : ''});`
       const input = document.createElement('textarea')
       document.body.appendChild(input)
       input.value = `${JSZipTxt}\n${FileSaverTxt}\n${TaoTxt}\n${exec}\n`
@@ -106,8 +70,59 @@ export default function StartPage() {
 
       {/* step 1 */}
       <div className="pt-8 pb-4">
+        <h4 className="text-2xl">获取代码段</h4>
+        <p className="mt-2 text-gray-600">点击“获取代码段”（如需抓取好友说说，请输入好友 QQ）</p>
+      </div>
+
+      <div className="pb-4">
+        <div className="pb-2">
+          <div>
+            <InputGroup
+              placeholder="请输入好友 QQ (非必填)"
+              value={qq}
+              onChange={(e: any) => setQq(e.target.value)}
+              rightElement={(
+                qq.length ? (
+                  <Button
+                    minimal
+                    icon="cross"
+                    onClick={() => setQq('')}
+                  />
+                ) : (
+                  <></>
+                )
+              )}
+            />
+          </div>
+          <div className="pt-2">
+            <Button
+              intent="success"
+              icon="code-block"
+              loading={!JSZipTxt || !FileSaverTxt || !TaoTxt || copyLoading}
+              onClick={copyCode}
+            >
+              获取代码段
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* step 2 */}
+      <div className="pt-8 pb-4">
         <h4 className="text-2xl">使用开发者工具</h4>
-        <p className="mt-2 text-gray-600">打开 Chrome 浏览器中的“控制 / 更多工具 / 开发者工具”</p>
+        <p className="mt-2 text-gray-600">登录 <a className="text-blue-600" href="https://qzone.qq.com" target="_blank" rel="noreferrer">QQ 空间</a></p>
+        <p className="mt-2 text-gray-600">打开 Chrome 浏览器中的“① 控制 / ② 更多工具 / ③ 开发者工具”</p>
+        <p className="mt-2 text-gray-600">
+          <span>快捷键为</span>
+          <KeyCombo className="inline-block mx-1" combo="F12" />
+          <span className="md:hidden block h-2"><br /></span>
+          <span>或</span>
+          <KeyCombo className="inline-block mx-1" combo="cmd" />
+          <span>+ </span>
+          <KeyCombo className="inline-block mx-1" combo="alt" />
+          <span>+</span>
+          <KeyCombo className="inline-block mx-1" combo="i" />
+        </p>
         <p className="mt-2 text-gray-600">
           <Button
             icon="download"
@@ -122,79 +137,12 @@ export default function StartPage() {
         <img alt="img" src={step1} className="shadow-lg" />
       </div>
 
-      {/* step 2 */}
-      <div className="pt-8 pb-4">
-        <h4 className="text-2xl">查找 g_tk 值</h4>
-        <p className="mt-2 text-gray-600">访问 <QzoneUrl /> 并登录后，进入开发者工具中的“Network / XHR / 任一网络请求 / Headers”</p>
-        <p className="mt-2 text-gray-600">在 “General / Request URL” 中找到 g_tk 值并复制（数字部分），若未找到，请切换网络请求</p>
-      </div>
-
-      <div className="pb-4">
-        <img alt="img" src={step2} className="shadow-lg" />
-      </div>
 
       {/* step 3 */}
       <div className="pt-8 pb-4">
-        <h4 className="text-2xl">获取代码段</h4>
-        <p className="mt-2 text-gray-600">将 g_tk 值粘贴到下方输入框（如需抓取好友说说，请再输入好友 QQ），然后点击“获取代码段”</p>
-      </div>
-
-      <div className="pb-4">
-        <div className="flex flex-wrap md:flex-no-wrap pb-2">
-          <div className="w-full md:w-1/2">
-            <InputGroup
-              placeholder="请粘贴 g_tk 值"
-              value={token}
-              onChange={(e: any) => setToken(e.target.value)}
-              rightElement={(
-                token.length ? (
-                  <Button
-                    minimal
-                    icon="cross"
-                    onClick={() => setToken('')}
-                  />
-                ) : (
-                  <></>
-                )
-              )}
-            />
-          </div>
-          <div className="w-full md:w-1/2 pl-0 md:pl-2 pt-2 md:pt-0">
-            <InputGroup
-              placeholder="请输入好友 QQ (非必填)"
-              value={qq}
-              onChange={(e: any) => setQq(e.target.value)}
-              rightElement={(
-                qq.length ? (
-                  <Button
-                    minimal
-                    icon="cross"
-                    onClick={() => setQq('')}
-                  />
-                ) : (
-                    <></>
-                  )
-              )}
-            />
-          </div>
-        </div>
-        <Button
-          intent="success"
-          icon="code-block"
-          loading={!JSZipTxt || !FileSaverTxt || !TaoTxt || copyLoading}
-          disabled={!token}
-          onClick={copyCode}
-        >
-          获取代码段
-        </Button>
-      </div>
-
-
-      {/* step 4 */}
-      <div className="pt-8 pb-4">
         <h4 className="text-2xl">执行代码段</h4>
-        <p className="mt-2 text-gray-600">返回 QQ 空间页面的开发者工具，进入 “Console” 控制台，点击“禁用”按钮清空控制台</p>
-        <p className="mt-2 text-gray-600">在控制台粘贴代码段，敲击回车键，开始执行</p>
+        <p className="mt-2 text-gray-600">进入 ①“Console” 控制台，点击 ②“禁用”按钮清空控制台</p>
+        <p className="mt-2 text-gray-600">粘贴代码段，敲击 <KeyCombo className="inline-block" combo="enter" /> 键开始执行</p>
         <p className="mt-2 text-gray-600">执行过程中会抓取说说、评论、点赞、图片、视频、头像、表情包，请耐心等待</p>
         <p className="mt-2 text-gray-600">执行结束会自动下载 .zip 用户数据包，请妥善保存</p>
       </div>
