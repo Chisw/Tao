@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { DateTime } from 'luxon'
 import farewell from '../../images/farewell.gif'
 import demo from '../../images/demo.png'
+import chart from '../../images/chart.png'
 import logo from '../../images/logo.png'
 import qzone from '../../images/qzone.png'
 
 export default function Header() {
+
+  const [toggle, setToggle] = useState(true)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setToggle(!toggle)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [setToggle, toggle])
+
   return (
     <div
       className="z-30 top-0 w-full bg-theme"
@@ -21,7 +32,7 @@ export default function Header() {
           <div className="pt-8 pb-6">
             <p className="w-32"><img src={logo} alt="logo" /></p>
             <p className="text-base mt-4">归档 QQ 空间 “说说” </p>
-            <p className="text-base mt-1">保存至本地，可离线浏览、搜索</p>
+            <p className="text-base mt-1">保存至本地，可离线浏览、搜索、统计</p>
           </div>
 
           <div className="pb-6 text-xs leading-loose">
@@ -36,7 +47,7 @@ export default function Header() {
         </div>
 
         <div className="relative ml-4 w-1/3">
-          <img alt="demo" src={demo} className="absolute bottom-0" />
+          <img alt="demo" src={toggle ? demo : chart} className="-mb-10 absolute bottom-0 rounded shadow-lg" />
         </div>
 
       </div>
