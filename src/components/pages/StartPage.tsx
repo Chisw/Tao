@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, InputGroup, Toaster, KeyCombo } from '@blueprintjs/core'
+import { Button, InputGroup, Toaster, KeyCombo, Checkbox } from '@blueprintjs/core'
 import step1 from '../../images/step1.png'
 import step3 from '../../images/step3.png'
 
@@ -14,6 +14,7 @@ export default function StartPage() {
   const [qq, setQq] = useState('')
 
   const [copyLoading, setCopyLoading] = useState(false)
+  const [showInput, setShowInput] = useState(false)
 
   useEffect(() => {
 
@@ -70,15 +71,17 @@ export default function StartPage() {
 
       {/* step 1 */}
       <div className="pt-8 pb-4">
-        <h4 className="text-2xl">获取代码段</h4>
-        <p className="mt-2 text-gray-600">点击“获取代码段”（如需抓取好友说说，请输入好友 QQ）</p>
+        <h4 className="text-2xl">复制代码段</h4>
+        <p className="mt-2 text-gray-600">点击下方按钮，复制到剪贴板</p>
       </div>
 
       <div className="pb-4">
         <div className="pb-2">
-          <div>
+          {showInput && (
             <InputGroup
-              placeholder="请输入好友 QQ (非必填)"
+              large
+              placeholder="请输入好友 QQ "
+              className="mb-3"
               value={qq}
               onChange={(e: any) => setQq(e.target.value)}
               rightElement={(
@@ -88,22 +91,30 @@ export default function StartPage() {
                     icon="cross"
                     onClick={() => setQq('')}
                   />
-                ) : (
-                  <></>
-                )
+                ) : <></>
               )}
             />
-          </div>
-          <div className="pt-2">
+          )}
+
+          <div>
             <Button
               large
               intent="warning"
-              icon="code-block"
+              icon="duplicate"
               loading={!JSZipTxt || !FileSaverTxt || !TaoTxt || copyLoading}
               onClick={copyCode}
             >
-              获取代码段
+              复制代码段
             </Button>
+            <div className="pt-4 flex-grow">
+              <Checkbox
+                checked={showInput}
+                onChange={() => setShowInput(!showInput)}
+                className="m-0 inline-block"
+              >
+                抓取好友说说
+              </Checkbox>
+            </div>
           </div>
         </div>
       </div>
@@ -113,16 +124,9 @@ export default function StartPage() {
         <h4 className="text-2xl">使用开发者工具</h4>
         <p className="mt-2 text-gray-600">登录 <a className="text-yellow-600 underline hover:text-yellow-700" href="https://qzone.qq.com" target="_blank" rel="noreferrer">QQ 空间</a></p>
         <p className="mt-2 text-gray-600">打开 Chrome 浏览器中的“① 控制 / ② 更多工具 / ③ 开发者工具”</p>
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-gray-600 flex items-center">
           <span>快捷键为</span>
           <KeyCombo className="inline-block mx-1" combo="F12" />
-          <span className="md:hidden block h-2"><br /></span>
-          <span>或</span>
-          <KeyCombo className="inline-block mx-1" combo="cmd" />
-          <span>+ </span>
-          <KeyCombo className="inline-block mx-1" combo="alt" />
-          <span>+</span>
-          <KeyCombo className="inline-block mx-1" combo="i" />
         </p>
         <p className="mt-2 text-gray-600">
           <Button
@@ -143,7 +147,7 @@ export default function StartPage() {
       {/* step 3 */}
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">执行代码段</h4>
-        <p className="mt-2 text-gray-600">进入 ①“Console” 控制台，点击 ②“禁用”按钮清空控制台</p>
+        <p className="mt-2 text-gray-600">进入 ①“Console” 控制台，点击 ②“清空”按钮清空控制台</p>
         <p className="mt-2 text-gray-600">粘贴代码段，敲击 <KeyCombo className="inline-block" combo="enter" /> 键开始执行</p>
         <p className="mt-2 text-gray-600">执行过程中会抓取说说、评论、点赞、图片、视频、头像、表情包，请耐心等待</p>
         <p className="mt-2 text-gray-600">执行结束会自动下载 .zip 用户数据包，请妥善保存</p>
