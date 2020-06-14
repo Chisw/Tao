@@ -75,6 +75,11 @@ export default function FAQPage() {
       </div>
 
       <div className="pt-8 pb-4">
+        <h4 className="text-2xl">如何查看统计信息？</h4>
+        <p className="mt-4 text-gray-600">点击顶部蓝色数字即可</p>
+      </div>
+
+      <div className="pt-8 pb-4">
         <h4 className="text-2xl">有新的模板包发布后，该如何使用？</h4>
         <p className="mt-4 text-gray-600">将旧的 user_data 照例拖入新的模板文件夹中即可</p>
       </div>
