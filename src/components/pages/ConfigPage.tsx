@@ -32,6 +32,7 @@ export default function ConfigPage() {
         <p className="mt-2 text-gray-600">建议使用轻量级的 Sublime Text 编辑器打开进行编辑</p>
         <p className="mt-2 text-gray-600">
           <Button
+            outlined
             icon="download"
             onClick={() => window.open(`https://www.sublimetext.com/`)}
           >

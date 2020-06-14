@@ -12,6 +12,7 @@ export default function FAQPage() {
         <p className="mt-2 text-gray-600">源码托管在 GitHub 上，可供审查</p>
         <p className="mt-2 text-gray-600">
           <Button
+            outlined
             icon="link"
             onClick={() => window.open(`https://github.com/chisw/Tao`)}
           >
@@ -46,10 +47,10 @@ export default function FAQPage() {
 
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">格式化日期是怎么搜索的？</h4>
-        <p className="mt-4 text-gray-600">输入 <Tag>@20080808</Tag> 返回2008年8月8日当天的说说</p>
-        <p className="mt-2 text-gray-600">输入 <Tag>@20080808.</Tag> 返回2008年8月8日当天及以前的说说</p>
-        <p className="mt-2 text-gray-600">输入 <Tag>@20080808..</Tag> 返回2008年8月8日当天及以后的说说</p>
-        <p className="mt-2 text-gray-600">输入 <Tag>@20080808.20081231</Tag> 返回2008年8月8日当天 至 2008年12月31日当天的说说</p>
+        <p className="mt-4 text-gray-600">输入 <Tag intent="warning">@20080808</Tag> 返回2008年8月8日当天的说说</p>
+        <p className="mt-2 text-gray-600">输入 <Tag intent="warning">@20080808.</Tag> 返回2008年8月8日当天及以前的说说</p>
+        <p className="mt-2 text-gray-600">输入 <Tag intent="warning">@20080808..</Tag> 返回2008年8月8日当天及以后的说说</p>
+        <p className="mt-2 text-gray-600">输入 <Tag intent="warning">@20080808.20081231</Tag> 返回2008年8月8日当天 至 2008年12月31日当天的说说</p>
         <p className="mt-2 text-gray-600">不符合上述格式的文本，将以原文本直接搜索</p>
       </div>
 
