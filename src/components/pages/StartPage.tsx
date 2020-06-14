@@ -111,7 +111,7 @@ export default function StartPage() {
       {/* step 2 */}
       <div className="pt-8 pb-4">
         <h4 className="text-2xl">使用开发者工具</h4>
-        <p className="mt-2 text-gray-600">登录 <a className="text-yellow-600" href="https://qzone.qq.com" target="_blank" rel="noreferrer">QQ 空间</a></p>
+        <p className="mt-2 text-gray-600">登录 <a className="text-yellow-600 underline hover:text-yellow-700" href="https://qzone.qq.com" target="_blank" rel="noreferrer">QQ 空间</a></p>
         <p className="mt-2 text-gray-600">打开 Chrome 浏览器中的“① 控制 / ② 更多工具 / ③ 开发者工具”</p>
         <p className="mt-2 text-gray-600">
           <span>快捷键为</span>
