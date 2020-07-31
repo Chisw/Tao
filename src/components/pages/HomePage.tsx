@@ -15,7 +15,7 @@ export default function HomePage() {
         <Tabs
           large
           selectedTabId={active}
-          onChange={id => { setActive(id as string) }}
+          onChange={id => setActive(id as string)}
         >
           <Tab id="start" className="mx-2" title="开始" panel={<StartPage />}></Tab>
           <Tab id="template" className="mx-2" title="模板" panel={<TemplatePage />}></Tab>
