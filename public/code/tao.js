@@ -164,6 +164,8 @@
       const taoList = []
       const friendMap = {}
       const all = msgList.length
+      
+      friendMap[this._qq] = this._name
 
       const boardListJSONStr = JSON.stringify(boardList)
       boardList.forEach(b => {
@@ -194,8 +196,6 @@
             rt_uin,
             rt_uinname,
           } = msg
-
-          friendMap[this._qq] = this._name
 
           // qq in comment and subComment
           ;(commentlist || []).forEach(c => {
