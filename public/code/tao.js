@@ -40,7 +40,7 @@
       this.log(`Init data..`)
 
       const data = await this.fetchMsgListByPos(0)
-      const { total, logininfo: { name, uin } } = data
+      const { total, usrinfo: { name, uin } } = data
 
       this.log(`Start fetching..`)
 
@@ -164,7 +164,7 @@
       const taoList = []
       const friendMap = {}
       const all = msgList.length
-      
+
       friendMap[this._qq] = this._name
 
       const boardListJSONStr = JSON.stringify(boardList)
