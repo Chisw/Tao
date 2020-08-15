@@ -60,10 +60,22 @@ export const userDataNodes: ITreeNode[] = [
             secondaryLabel: '所有处理后的说说记录',
           },
           {
+            id: 'boardList',
+            icon: 'document',
+            label: 'boardList.js',
+            secondaryLabel: '留言板记录',
+          },
+          {
             id: 'data',
             icon: 'document',
             label: 'data.json',
-            secondaryLabel: '抓取的原始数据，供纠错、二次开发',
+            secondaryLabel: '说说原始数据，供纠错、二次开发',
+          },
+          {
+            id: 'data.board',
+            icon: 'document',
+            label: 'data.board.json',
+            secondaryLabel: '留言板原始数据',
           },
         ]
       },

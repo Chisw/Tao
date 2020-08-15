@@ -33,6 +33,7 @@ export default function Header() {
             <p className="w-32"><img src={logo} alt="logo" /></p>
             <p className="text-base mt-4">归档 QQ 空间 “说说” </p>
             <p className="text-base mt-1">保存至本地，可离线浏览、搜索、统计</p>
+            <p className="text-base mt-1">重磅！现已能同时保存留言板数据</p>
           </div>
 
           <div className="pb-6 text-xs leading-loose">

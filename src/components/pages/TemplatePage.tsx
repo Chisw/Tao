@@ -2,7 +2,7 @@ import React from 'react'
 import use_template from '../../images/use_template.gif'
 import { Tag, Button } from '@blueprintjs/core'
 
-const latest = `https://tao.jisuowei.com/download/v2020.06.14.zip`
+const latest = `https://tao.jisuowei.com/download/v2020.08.15.zip`
 
 export default function TemplatePage() {
   return (
@@ -22,7 +22,8 @@ export default function TemplatePage() {
           <Tag intent="warning" round className="ml-2">NEW</Tag>
         </p>
         <p className="mt-2 text-gray-600">- 支持离线浏览、搜索</p>
-        <p className="mt-2 text-gray-600">- 支发布数量、评论点赞的统计</p>
+        <p className="mt-2 text-gray-600">- 支持留言板查看</p>
+        <p className="mt-2 text-gray-600">- 支持发布数量、评论点赞的统计</p>
         <p className="mt-2 text-gray-600">- 支持分页、格式化日期搜索</p>
         <p className="mt-2 text-gray-600">- 支持发布设备、发布位置、浏览次数、点赞好友的显示</p>
         <p className="mt-2 text-gray-600">- 支持好友别名、复制 QQ、发送邮件跳转、访问空间跳转</p>

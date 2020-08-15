@@ -149,7 +149,7 @@ export default function StartPage() {
         <h4 className="text-2xl">执行代码段</h4>
         <p className="mt-2 text-gray-600">进入 ①“Console” 控制台，点击 ②“清空”按钮清空控制台</p>
         <p className="mt-2 text-gray-600">粘贴代码段，敲击 <KeyCombo className="inline-block" combo="enter" /> 键开始执行</p>
-        <p className="mt-2 text-gray-600">执行过程中会抓取说说、评论、点赞、图片、视频、头像、表情包，请耐心等待</p>
+        <p className="mt-2 text-gray-600">执行过程中会抓取说说、评论、点赞、图片、视频、头像、表情包、留言板数据，请耐心等待</p>
         <p className="mt-2 text-gray-600">执行结束会自动下载 .zip 用户数据包，请妥善保存</p>
       </div>
 
