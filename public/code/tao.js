@@ -1,6 +1,7 @@
 ;(function(){
 
   const pageSize = 40
+  const boardPageSize = 20
 
   const Tao = {
 
@@ -49,6 +50,12 @@
       let msgList = []
       let pos = 0
 
+      const boardData = await this.fetchBoardListByPos(0)
+      const { data: { total: boardTotal } } = boardData
+
+      let boardList = []
+      let boardPos = 0
+
       do {
         const res = await this.fetchMsgListByPos(pos)
         msgList = msgList.concat([...(res.msglist || [])])
@@ -56,13 +63,23 @@
         this.log(`Fetching.. 【抓取说说记录】 [${msgList.length}/${total}]`)
       } while (pos < (total + pageSize))
 
-      if (!msgList || !msgList.length) {
-        this.log('未检测到说说记录')
-        return
-      }
+      if (!msgList.length) this.log('未检测到说说记录')
+
+
+      do {
+        const res = await this.fetchBoardListByPos(boardPos)
+        boardList = boardList.concat([...(res.data.commentList || [])])
+        boardPos += boardPageSize
+        this.log(`Fetching.. 【抓取留言板记录】 [${boardList.length}/${boardTotal}]`)
+      } while (boardPos < (boardTotal + boardPageSize))
+
+      if (!boardList.length) this.log('未检测到留言板记录')
+
+
+      if (msgList.length + boardList.length === 0) return
 
       setTimeout(async () => {
-        await this.handleMsgList(msgList)
+        await this.handleMsgListAndBoardList(msgList, boardList)
       }, 100)
 
     },
@@ -70,9 +87,13 @@
     async fetchMsgListByPos(pos) {
       return fetch(`https://user.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6?code_version=1&format=json&g_tk=${this._token}&pos=${pos}&num=${pageSize}${this._other? `&uin=${this._other}` : ''}`)
         .then(res => res.json())
-        .then(data => {
-          return data
-        })
+        .then(data => data)
+    },
+
+    async fetchBoardListByPos(pos) {
+      return fetch(`https://user.qzone.qq.com/proxy/domain/m.qzone.qq.com/cgi-bin/new/get_msgb?hostUin=${(this._other || this._qq)}&num=${boardPageSize}&start=${pos}&inCharset=utf-8&outCharset=utf-8&format=json&g_tk=${this._token}`)
+        .then(res => res.json())
+        .then(data => data)
     },
 
     async fetchLikeListByTid(tid) {
@@ -138,85 +159,97 @@
       })
     },
 
-    async handleMsgList(msgList) {
+    async handleMsgListAndBoardList(msgList, boardList) {
 
       const taoList = []
       const friendMap = {}
       const all = msgList.length
 
-      let msgIndex = 0
-      do {
-        const msg = msgList[msgIndex]
-        const {
-          tid,
-          content,
-          created_time,
-          lbs,
-          source_name,
-          pic,
-          video,
-          commentlist,
-          rt_con,
-          rt_createTime,
-          rt_source_name,
-          rt_uin,
-          rt_uinname,
-        } = msg
-
-        friendMap[this._qq] = this._name
-
-        // qq in comment and subComment
-        ;(commentlist || []).forEach(c => {
-          if (!friendMap[c.uin]) friendMap[c.uin] = c.name
-            ;(c.list_3 || []).forEach(({ uin, name }) => {
-              if (uin && name && !friendMap[uin]) friendMap[uin] = name
-            })
+      const boardListJSONStr = JSON.stringify(boardList)
+      boardList.forEach(b => {
+        const { uin, nickname, replyList } = b
+        if (uin && nickname) friendMap[uin] = nickname
+        ;(replyList || []).forEach(r => {
+          const { _uin, _nick } = r
+          if (_uin && _nick) friendMap[uin] = nickname
         })
+      })
 
-        // qq in repost
-        if (rt_uin && rt_uinname && !friendMap[rt_uin]) {
-          friendMap[rt_uin] = rt_uinname
-        }
-
-        const likeList = []
-        const like = await this.fetchLikeListByTid(tid)
-        const { likedata, newdata } = like
-        // qq in likeList
-        if (likedata && likedata.list) {
-          likedata.list.forEach(l => {
-            const [qq, name] = l
-            if (!friendMap[qq]) friendMap[qq] = name
-            likeList.push(qq)
-          })
-        }
-
-        if (!taoList.find(tao => tao.tid === tid)) {
-          taoList.push({
+      if (msgList.length) {
+        let msgIndex = 0
+        do {
+          const msg = msgList[msgIndex]
+          const {
             tid,
             content,
             created_time,
             lbs,
             source_name,
-            pic: this.handlePicOrVideo(pic || [], tid),
-            video: this.handlePicOrVideo(video || [], tid),
+            pic,
+            video,
             commentlist,
-            likeList,
-            likeSelf: likedata ? Boolean(likedata.ilike) : false,
-            likeCount: likedata ? likedata.cnt || 0 : 0,
-            personRead: newdata ? (newdata.PRD || 0) : 0,
-            repost: {
-              content: rt_con ? (rt_con.content || '') : '',
-              created_time: rt_createTime,
-              source_name: rt_source_name,
-              qq: rt_uin,
-            }
+            rt_con,
+            rt_createTime,
+            rt_source_name,
+            rt_uin,
+            rt_uinname,
+          } = msg
+
+          friendMap[this._qq] = this._name
+
+          // qq in comment and subComment
+          ;(commentlist || []).forEach(c => {
+            if (!friendMap[c.uin]) friendMap[c.uin] = c.name
+              ;(c.list_3 || []).forEach(({ uin, name }) => {
+                if (uin && name && !friendMap[uin]) friendMap[uin] = name
+              })
           })
-        }
 
-        msgIndex++
+          // qq in repost
+          if (rt_uin && rt_uinname && !friendMap[rt_uin]) {
+            friendMap[rt_uin] = rt_uinname
+          }
 
-        this.log(`Handling likeList.. 【抓取点赞记录】 [${msgIndex}/${all}]`)
-      } while (msgIndex < all)
+          const likeList = []
+          const like = await this.fetchLikeListByTid(tid)
+          const { likedata, newdata } = like
+          // qq in likeList
+          if (likedata && likedata.list) {
+            likedata.list.forEach(l => {
+              const [qq, name] = l
+              if (!friendMap[qq]) friendMap[qq] = name
+              likeList.push(qq)
+            })
+          }
+
+          if (!taoList.find(tao => tao.tid === tid)) {
+            taoList.push({
+              tid,
+              content,
+              created_time,
+              lbs,
+              source_name,
+              pic: this.handlePicOrVideo(pic || [], tid),
+              video: this.handlePicOrVideo(video || [], tid),
+              commentlist,
+              likeList,
+              likeSelf: likedata ? Boolean(likedata.ilike) : false,
+              likeCount: likedata ? likedata.cnt || 0 : 0,
+              personRead: newdata ? (newdata.PRD || 0) : 0,
+              repost: {
+                content: rt_con ? (rt_con.content || '') : '',
+                created_time: rt_createTime,
+                source_name: rt_source_name,
+                qq: rt_uin,
+              }
+            })
+          }
+
+          msgIndex++
+
+          this.log(`Handling likeList.. 【抓取点赞记录】 [${msgIndex}/${all}]`)
+        } while (msgIndex < all)
+      }
 
       // qq in atString
       const taoListJSONStr = JSON.stringify(taoList)
@@ -272,7 +305,7 @@
 
       // zip emoji
       let emojis = []
-      const _emojis = taoListJSONStr.match(/\[em\]e[0-9]*\[\/em\]/gi)
+      const _emojis = (taoListJSONStr + boardListJSONStr).match(/\[em\]e[0-9]*\[\/em\]/gi)
       if (_emojis && _emojis.length) {
         _emojis.forEach(emoji => {
           const e = emoji.replace('[em]', '').replace('[/em]', '')
@@ -296,15 +329,20 @@
         } while (emojiIndex < emojis.length)
       }
 
+      const metaEl = document.querySelector('meta[name="description"]')
+      const description = metaEl ? metaEl.getAttribute('content') : ''
+
       // zip data
       folder.file(`data/data.json`, JSON.stringify(msgList))
+      folder.file(`data/data.board.json`, boardListJSONStr)
+      folder.file(`data/boardList.js`, 'const boardList = ' + boardListJSONStr)
       folder.file(`data/taoList.js`, 'const taoList = ' + taoListJSONStr)
       folder.file(`data/friendMap.js`, 'const friendMap = ' + JSON.stringify(friendMap))
       folder.file(`data/error.txt`, this._error.join('\n'))
       folder.file(`data/config.js`, `
 const config = {
   title: '${this._other || encodeURIComponent(document.title)}',
-  description: '${this._other || encodeURIComponent(document.querySelector('meta[name="description"]').getAttribute('content'))}',
+  description: '${this._other || encodeURIComponent(description)}',
   qq: ${this._other || this._qq},
   name: '${this._other || encodeURIComponent(this._name)}',
   hide: [
