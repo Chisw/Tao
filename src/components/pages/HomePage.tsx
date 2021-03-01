@@ -10,7 +10,7 @@ export default function HomePage() {
   const [active, setActive] = useState('start')
 
   return (
-    <div className="tao-center">
+    <div className="container max-w-3xl mx-auto px-4 lg:px-0">
       <div className="pt-4 pb-12">
         <Tabs
           large

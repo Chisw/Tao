@@ -26,7 +26,7 @@ export default function Header() {
         backgroundPosition: 'center',
       }}
     >
-      <div className="tao-center flex">
+      <div className="container max-w-3xl mx-auto px-4 lg:px-0 flex">
 
         <div className="flex-grow text-white">
           <div className="pt-8 pb-6">

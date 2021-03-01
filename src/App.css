@@ -19,17 +19,6 @@ p {
   text-align: justify;
 }
 
-.tao-center {
-  margin: 0 auto;
-  max-width: 640px;
-}
-
-@media screen and (max-width: 640px) {
-  .tao-center {
-    padding: 0 1rem;
-  }
-}
-
 .bg-theme {
   background: #f1a308;
 }
