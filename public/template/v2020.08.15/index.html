@@ -426,7 +426,7 @@ html, body {
         
         getDatetime(s) {
           const d = new Date(s * 1000)
-          return luxon.DateTime.fromJSDate(d).toFormat('yyyy年MM月dd日 hh:mm')
+          return luxon.DateTime.fromJSDate(d).toFormat('yyyy年MM月dd日 HH:mm')
         },
 
         updatePai(p) {
@@ -530,8 +530,8 @@ html, body {
           // @20080808.20081231  2008年8月8日当天 至 2008年12月31日当天
 
           const getSeconds = (start, end) => {
-            const s = luxon.DateTime.fromFormat(`${start}000000`, 'yyyyMMddhhmmss').toMillis() / 1000
-            const e = luxon.DateTime.fromFormat(`${end}235959`, 'yyyyMMddhhmmss').toMillis() / 1000
+            const s = luxon.DateTime.fromFormat(`${start}000000`, 'yyyyMMddHHmmss').toMillis() / 1000
+            const e = luxon.DateTime.fromFormat(`${end}235959`, 'yyyyMMddHHmmss').toMillis() / 1000
             return [s, e]
           }
 
