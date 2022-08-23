@@ -71,7 +71,14 @@ html, body {
         >
           {{taos.length}}
         </span>
-        条说说
+        条说说和
+        <span
+          class="underline text-blue-500 hover:text-blue-700 cursor-pointer"
+          @click="initBoard"
+        >
+          {{boards.length}}
+        </span>
+        条留言
       </h1>
       <h5 class="break-all text-sm text-gray-600">{{decodeURIComponent(config.title)}}</h5>
       <h5 class="break-all text-sm text-gray-600">{{decodeURIComponent(config.description)}}</h5>
@@ -306,6 +313,35 @@ html, body {
 
     </el-dialog>
 
+    <!-- board -->
+    <el-dialog title="留言板" :visible.sync="boardOpen">
+      <div
+        v-for="(b, index) in boards"
+        class="py-4 border-t flex"
+      >
+        <img
+          :data-qq="b.uin"
+          :src="`./user_data/avatar/${b.uin}.jpeg`"
+          class="w-16 h-16 rounded-md inline-block shadow cursor-pointer"
+        >
+        <div class="pl-4 flex-grow">
+          <div class="flex justify-between text-xs text-gray-500">
+            <span v-html="e(FM[b.uin])" class="text-gray-700"></span>
+            <span>#{{index+1}} {{b.pubtime}}</span>
+          </div>
+          <div v-html="e(b.ubbContent)" class="mt-1"></div>
+          <div v-if="b.replyList && b.replyList.length" class="bg-gray-200 p-2 rounded-md mt-2">
+            <div v-for="re in b.replyList">
+              <p class="mb-1">
+                <span v-html="e(FM[re.uin])" :data-qq="re.uin" class="text-blue-600 cursor-pointer"></span>：
+                <span v-html="e(re.content)"></span>
+                <span class="ml-2 text-xs text-gray-400">{{getDatetime(re.time)}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
 
     <!-- viewer -->
     <div id="viewer-container" class="hidden">
@@ -338,6 +374,7 @@ html, body {
 <script src="./user_data/data/taoList.js" onerror="loadError('taoList')"></script>
 <script src="./user_data/data/friendMap.js" onerror="loadError('friendMap')"></script>
 <script src="./user_data/data/config.js" onerror="loadError('config')"></script>
+<script src="./user_data/data/boardList.js" onerror="loadError('boardList')"></script>
 <script>
 (function(){
 
@@ -349,6 +386,7 @@ html, body {
 
       data: {
         taos: taoList.filter(tao => !config.hide.includes(tao.tid)),
+        boards: boardList.filter(b => !config.hide.includes(b.uin)).reverse(),
         current: 1,
         pageSize: 20,
         useFiltered: false,
@@ -358,6 +396,7 @@ html, body {
         detailOpen: false,
         detailQQ: 0,
         chartOpen: false,
+        boardOpen: false,
         recordBy: 'year',
         joinBy: 'comment',
         commentRanking: [],
@@ -387,7 +426,7 @@ html, body {
         
         getDatetime(s) {
           const d = new Date(s * 1000)
-          return luxon.DateTime.fromJSDate(d).toFormat('yyyy年MM月dd日 hh:mm')
+          return luxon.DateTime.fromJSDate(d).toFormat('yyyy年MM月dd日 HH:mm')
         },
 
         updatePai(p) {
@@ -491,8 +530,8 @@ html, body {
           // @20080808.20081231  2008年8月8日当天 至 2008年12月31日当天
 
           const getSeconds = (start, end) => {
-            const s = luxon.DateTime.fromFormat(`${start}000000`, 'yyyyMMddhhmmss').toMillis() / 1000
-            const e = luxon.DateTime.fromFormat(`${end}235959`, 'yyyyMMddhhmmss').toMillis() / 1000
+            const s = luxon.DateTime.fromFormat(`${start}000000`, 'yyyyMMddHHmmss').toMillis() / 1000
+            const e = luxon.DateTime.fromFormat(`${end}235959`, 'yyyyMMddHHmmss').toMillis() / 1000
             return [s, e]
           }
 
@@ -586,6 +625,7 @@ html, body {
         },
 
         initChart() {
+          if (!this.taos.length) return
           this.chartOpen = true
           const last = this.getDateStrByCreatedTime(this.taos[0].created_time)
           const first = this.getDateStrByCreatedTime(this.taos[this.taos.length - 1].created_time)
@@ -683,6 +723,10 @@ html, body {
               })
             })
           }, 1)
+        },
+
+        initBoard() {
+          this.boardOpen = true
         },
       },
     })
