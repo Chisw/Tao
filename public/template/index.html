@@ -62,7 +62,17 @@ html, body {
   <div class="tao-container mx-auto my-0">
 
     <div class="tao-top py-4">
-      <h1 class="break-all text-3xl text-gray-900 mb-2"><span v-html="e(FM[config.qq])"></span> 的 {{taos.length}} 条说说</h1>
+      <h1 class="break-all text-3xl text-gray-900 mb-2">
+        <span v-html="e(FM[config.qq])"></span>
+        的
+        <span
+          class="underline text-blue-500 hover:text-blue-700 cursor-pointer"
+          @click="initChart"
+        >
+          {{taos.length}}
+        </span>
+        条说说
+      </h1>
       <h5 class="break-all text-sm text-gray-600">{{decodeURIComponent(config.title)}}</h5>
       <h5 class="break-all text-sm text-gray-600">{{decodeURIComponent(config.description)}}</h5>
       <h5 class="break-all text-xs text-gray-400 mt-1">
@@ -241,6 +251,62 @@ html, body {
       </div>
     </el-drawer>
 
+    <!-- chart -->
+    <el-dialog
+      title="统计"
+      :visible.sync="chartOpen"
+      width="90%"
+    >
+      <div class="w-full">
+        <div class="mb-4 flex justify-between items-center">
+          <h4 class="text-2xl">发布数量</h4>
+          <div>
+            <el-radio-group v-model="recordBy" size="small">
+              <el-radio-button label="year">按年</el-radio-button>
+              <el-radio-button label="month">按月</el-radio-button>
+              <el-radio-button label="day">按日</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+        <div class="relative h-64 overflow-hidden">
+          <div id="chart-record-year" :class="`absolute w-full h-64 ${recordBy === 'year' ? 'opacity-100' : 'opacity-0 -mt-64'}`"></div>
+          <div id="chart-record-month" :class="`absolute w-full h-64 ${recordBy === 'month' ? 'opacity-100' : 'opacity-0 -mt-64'}`"></div>
+          <div id="chart-record" :class="`absolute w-full h-64 ${recordBy === 'day' ? 'opacity-100' : 'opacity-0 -mt-64'}`"></div>
+        </div>
+      </div>
+
+      <div class="w-full mt-4">
+        <div class="mb-8 flex justify-between items-center">
+          <h4 class="text-2xl">评论点赞</h4>
+          <div>
+            <el-radio-group v-model="joinBy" size="small">
+              <el-radio-button label="comment">评论</el-radio-button>
+              <el-radio-button label="like">点赞</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap">
+        <div
+          v-for="(r, index) in (joinBy === 'comment' ? commentRanking : likeRanking)"
+          class="mb-4 w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 flex items-center"
+        >
+          <img
+            :data-qq="r.qq"
+            :src="`./user_data/avatar/${r.qq}.jpeg`"
+            class="w-10 h-10 rounded-full inline-block shadow cursor-pointer"
+          >
+          <div class="pl-2 flex-grow">
+            <p class="text-xs opacity-75" v-html="(index + 1) + '. ' + e(FM[r.qq])"></p>
+            <p class="text-sm">{{joinBy === 'comment' ? '评论' : '点赞'}}了 {{r.count}} 次</p>
+          </div>
+        </div>
+      </div>
+
+    </el-dialog>
+
+
     <!-- viewer -->
     <div id="viewer-container" class="hidden">
       <img v-for="p in viewerPics" :src="`./user_data/media/${p}`">
@@ -266,6 +332,8 @@ html, body {
 <script src="./static/js/vue.min.js"></script>
 <script src="./static/js/element.min.js"></script>
 <script src="./static/js/luxon.min.js"></script>
+<script src="./static/js/echarts.common.min.js"></script>
+<script src="./static/js/lodash.min.js"></script>
 <script src="./static/js/viewer.min.js"></script>
 <script src="./user_data/data/taoList.js" onerror="loadError('taoList')"></script>
 <script src="./user_data/data/friendMap.js" onerror="loadError('friendMap')"></script>
@@ -289,6 +357,11 @@ html, body {
         FM: Object.assign({}, friendMap, config.alias),
         detailOpen: false,
         detailQQ: 0,
+        chartOpen: false,
+        recordBy: 'year',
+        joinBy: 'comment',
+        commentRanking: [],
+        likeRanking: [],
         searchVal: '',
         lastSearchVal: '',
         viewerPics: [],
@@ -505,6 +578,110 @@ html, body {
                 },
               }
             ).show().view(index)
+          }, 1)
+        },
+
+        getDateStrByCreatedTime(time) {
+          return luxon.DateTime.fromJSDate(new Date(time*1000)).toFormat('yyyy/MM/dd')
+        },
+
+        initChart() {
+          this.chartOpen = true
+          const last = this.getDateStrByCreatedTime(this.taos[0].created_time)
+          const first = this.getDateStrByCreatedTime(this.taos[this.taos.length - 1].created_time)
+
+          const records = luxon.Interval
+            .fromDateTimes(
+              luxon.DateTime.fromFormat(first, 'yyyy/MM/dd'),
+              luxon.DateTime.fromFormat(last, 'yyyy/MM/dd')
+            )
+            .splitBy({ days: 1 })
+            .map(d => {
+              return {
+                xAxis: d.start.toFormat('yyyy/MM/dd'),
+                year: d.start.toFormat('yyyy'),
+                month: d.start.toFormat('yyyy/MM'),
+                count: 0,
+              }
+            })
+
+          const commentRanking = []
+          const likeRanking = []
+
+          Object.keys(friendMap).forEach(qq => {
+            if (!config.blacklist.includes(+qq)) {
+              commentRanking.push({ qq, count: 0 })
+              likeRanking.push({ qq, count: 0 })
+            }
+          })
+
+          this.taos.forEach(t => {
+            const dateStr = this.getDateStrByCreatedTime(t.created_time)
+            const rec_pub = records.find(r => r.xAxis === dateStr)
+            if (rec_pub) rec_pub.count += 1
+
+            ;(t.commentlist || []).forEach(c => {
+              const qq = +_.get(c, 'uin', 0)
+              const rec_comment = commentRanking.find(r => +r.qq === qq)
+              if (rec_comment) rec_comment.count += 1
+
+              ;(c.list_3 || []).forEach(c3 => {
+                const qq = +_.get(c3, 'uin', 0)
+                const rec_comment_sub = commentRanking.find(r => +r.qq === qq)
+                if (rec_comment_sub) rec_comment_sub.count += 1
+              })
+            }) 
+
+            ;(t.likeList || []).forEach(qq => {
+              const rec_like = likeRanking.find(r => +r.qq === +qq)
+              if (rec_like) rec_like.count += 1
+            })
+
+            if (t.likeSelf) {
+              const rec_like = likeRanking.find(r => +r.qq === +config.qq)
+              if (rec_like) rec_like.count += 1
+            }
+          })
+
+          this.commentRanking = _.sortBy(commentRanking.filter(({ count }) => !!count ), 'count').reverse()
+          this.likeRanking = _.sortBy(likeRanking.filter(({ count }) => !!count ), 'count').reverse()
+
+          const monthRecords = 
+            Object
+              .entries(_.groupBy(records, 'month'))
+              .map(([key, value]) => ({
+                xAxis: key,
+                count: _.sumBy(value, 'count')
+              }))
+
+          const yearRecords = 
+            Object
+              .entries(_.groupBy(records, 'year'))
+              .map(([key, value]) => ({
+                xAxis: key,
+                count: _.sumBy(value, 'count')
+              }))
+
+          setTimeout(() => {
+            [
+              { id: 'chart-record', data: records },
+              { id: 'chart-record-month', data: monthRecords },
+              { id: 'chart-record-year', data: yearRecords },
+            ].forEach(({id, data}) => {
+              echarts.init(document.getElementById(id)).setOption({
+                color: ['#409EFF'],
+                tooltip: {},
+                xAxis: {
+                  data: data.map(({ xAxis }) => xAxis)
+                },
+                yAxis: {},
+                series: [{
+                  name: '发布数量',
+                  type: 'bar',
+                  data: data.map(({ count }) => count)
+                }]
+              })
+            })
           }, 1)
         },
       },
