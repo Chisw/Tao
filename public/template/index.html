@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
   <link rel="stylesheet" href="./static/css/element.min.css">
   <link rel="stylesheet" href="./static/css/tailwind.min.css">
-  <link rel="stylesheet" href="./static/css/swiper.min.css">
+  <link rel="stylesheet" href="./static/css/viewer.min.css">
   <link rel="shortcut icon" href="./static/favicon.ico">
 <style>
 
@@ -27,11 +27,6 @@ html, body {
   padding: 20px;
   max-width: 640px;
   min-width: 320px;
-}
-
-.swiper-container {
-  position: absolute!important;
-  background-color: rgba(0,0,0, .6);
 }
 
 @media screen and (max-width: 640px) {
@@ -54,11 +49,6 @@ html, body {
     display: block!important;
     margin: 20px 0 0 0;
   }
-  .swiper-container .swiper-button-prev,
-  .swiper-container .swiper-button-next {
-    display: none;
-  }
-
 }
 
 .bg-contain { background-size: contain; }
@@ -87,6 +77,7 @@ html, body {
           <el-input
             placeholder="请输入内容、昵称 QQ 或格式化日期"
             v-model="searchVal"
+            id="searchVal"
             clearable
           >
           </el-input>
@@ -149,7 +140,7 @@ html, body {
               <div
                 class="w-full h-full bg-center bg-no-repeat bg-cover cursor-pointer"
                 :style="`background-image:url('./user_data/media/${p}');`"
-                @click="showPic(tao.pic, index)"
+                @click="showPics(tao.pic, index)"
               >
               </div>
             </div>
@@ -250,23 +241,9 @@ html, body {
       </div>
     </el-drawer>
 
-    <!-- swiper -->
-    <div v-if="showSwiper" class="fixed inset-0 z-10">
-      <div class="swiper-container inset-0">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="p in swiperPics">
-            <div class="swiper-zoom-container">
-              <img :src="`./user_data/media/${p}`">
-            </div>
-          </div>
-        </div>
-        <div class="swiper-pagination swiper-pagination-white"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-      <div class="fixed top-0 right-0 z-10 p-2" @click="closeSwiper">
-        <el-button icon="el-icon-close" circle type="danger"></el-button>
-      </div>
+    <!-- viewer -->
+    <div id="viewer-container" class="hidden">
+      <img v-for="p in viewerPics" :src="`./user_data/media/${p}`">
     </div>
 
     <el-backtop
@@ -277,6 +254,10 @@ html, body {
     >
     </el-backtop>
 
+    <div v-if="!success" class="fixed inset-0 z-50 bg-white opacity-75 flex justify-center items-center text-blue-500 text-4xl">
+      <i class="el-icon-loading"></i>
+    </div>
+
   </div>
 
 </div>
@@ -285,7 +266,7 @@ html, body {
 <script src="./static/js/vue.min.js"></script>
 <script src="./static/js/element.min.js"></script>
 <script src="./static/js/luxon.min.js"></script>
-<script src="./static/js/swiper.min.js"></script>
+<script src="./static/js/viewer.min.js"></script>
 <script src="./user_data/data/taoList.js" onerror="loadError('taoList')"></script>
 <script src="./user_data/data/friendMap.js" onerror="loadError('friendMap')"></script>
 <script src="./user_data/data/config.js" onerror="loadError('config')"></script>
@@ -310,8 +291,8 @@ html, body {
         detailQQ: 0,
         searchVal: '',
         lastSearchVal: '',
-        showSwiper: false,
-        swiperPics: [],
+        viewerPics: [],
+        success: false,
       },
 
       watch: {
@@ -379,7 +360,7 @@ html, body {
             let html = str
             const images = emojis.map(e => {
               const no = e.replace('[em]', '').replace('[/em]', '')
-              return `<img class="inline-block w-5 h-5" src="./user_data/emoji/${no}.gif" />`
+              return `<img class="inline-block w-5 h-5 align-text-bottom" src="./user_data/emoji/${no}.gif" />`
             })
             images.forEach((img, index) => {
               html = html.replace(emojis[index], img)
@@ -420,11 +401,13 @@ html, body {
               }
             }
           });
-          window.addEventListener('keyup', (event) => {
-            if (event.keyCode === 13) {
+          window.addEventListener('keyup', event => {
+            const { keyCode, target: { id } } = event
+            if (keyCode === 13 && id === 'searchVal') {
               this.search()
             }
           });
+          this.success = true
         },
 
         getDateSeconds(str) {
@@ -507,29 +490,23 @@ html, body {
           this.current = 1
         },
 
-        showPic(pics, index) {
-          this.showSwiper = true
-          this.swiperPics = pics
+        showPics(pics, index) {
+          this.viewerPics = pics
           setTimeout(() => {
-            new Swiper('.swiper-container', {
-              initialSlide: index,
-              zoom: true,
-              pagination: {
-                el: '.swiper-pagination',
-              },
-              navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              },
-            })
+            const viewer = new Viewer(
+              document.getElementById('viewer-container'),
+              {
+                title: false,
+                toolbar: false,
+                maxZoomRatio: 3,
+                minZoomRatio: .1,
+                hide() {
+                  viewer.destroy()
+                },
+              }
+            ).show().view(index)
           }, 1)
         },
-
-        closeSwiper() {
-          this.showSwiper = false
-          this.swiperPics = []
-        },
-
       },
     })
     window.tao = vm
